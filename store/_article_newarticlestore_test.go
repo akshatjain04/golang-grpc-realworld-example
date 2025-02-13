@@ -32,6 +32,8 @@ The assertion makes sure that the `NewArticleStore` can manage `nil` input witho
 roost_feedback [2/13/2025, 11:24:00 AM]:Modify Code to fix this error\n./article_newarticlestore_test.go:50:9: cannot use mdb (variable of type *mockDB) as *gorm.DB value in return statement\n\nUse a  return &gorm.DB{} instead of the existing code
 
 roost_feedback [2/13/2025, 2:41:58 PM]:Modify Code to fix this error\n./article_newarticlestore_test.go:50:9: cannot use mdb (variable of type *mockDB) as *gorm.DB value in return statement\n\nYou can use this kind of a setup function\n```\nfunc setupMockDB() *gorm.DB {\n\tsqlDB, _, _ := sqlmock.New()\n\tdb, _ := gorm.Open(postgres, sqlDB)\n\treturn db\n}\n\n```
+
+roost_feedback [2/13/2025, 4:21:31 PM]:a
 */
 
 // ********RoostGPT********
@@ -55,9 +57,11 @@ func TestNewArticleStore(t *testing.T) {
 		expected *ArticleStore
 	}{
 		{
-			name:     "Test with valid DB Instance",
-			db:       setupMockDB(),
-			expected: &ArticleStore{db: setupMockDB()},
+			name: "Test with valid DB Instance",
+			db:   setupMockDB(t),
+			expected: &ArticleStore{
+				db: setupMockDB(t),
+			},
 		},
 		{
 			name:     "Test with nil DB Instance",
@@ -67,19 +71,23 @@ func TestNewArticleStore(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-
 		t.Run(tc.name, func(t *testing.T) {
 			actual := NewArticleStore(tc.db)
-			assert.NotNil(t, actual, "ArticleStore should not be nil")
-			assert.Equal(t, tc.expected.db, actual.db, "Expected and Actual DB should match")
+			assert.NotNil(t, actual)
+			assert.EqualValues(t, tc.expected.db, actual.db)
 		})
 	}
 }
 
-// setupMockDB creates a mock DB for testing
-func setupMockDB() *gorm.DB {
-	sqlDB, _, _ := sqlmock.New()
+func setupMockDB(t *testing.T) *gorm.DB {
+	sqlDB, _, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("can't create sqlmock: %s", err)
+	}
 	dialector := postgres.New(postgres.Config{Conn: sqlDB})
-	db, _ := gorm.Open(dialector, &gorm.Config{})
+	db, err := gorm.Open(dialector, &gorm.Config{})
+	if err != nil {
+		t.Fatalf("can't open gorm connection: %s", err)
+	}
 	return db
 }
