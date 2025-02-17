@@ -1,0 +1,25 @@
+
+Use this import:
+        "github.com/DATA-DOG/go-sqlmock"                                                                                                                                         
+
+MockDB should look like this
+type MockDB struct {
+	mock.Mock
+	*gorm.DB
+} 
+
+Declare this function to setup mock db:
+func setupMockDB(mockDB *MockDB) {
+        db, _, _ := sqlmock.New()                                                                                                                                                
+        gdb, _ := gorm.Open("mysql", db)                                                                                                                                         
+        mockDB.DB = gdb                                                                                                                                                          
+}
+
+
+Inside the test function, initialize ArticleStore in this manner:
+
+setupMockDB(mockDB)                                                                                                                                      
+store := &ArticleStore{db: mockDB.DB}                                                                                                                    
+
+
+

@@ -1,0 +1,1438 @@
+{
+   "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go": {
+      "file_level_types": [
+         "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore",
+         "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+      ],
+      "file_level_consts": [],
+      "file_level_vars": [],
+      "function_dict": {
+         "AddFavorite": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.AddFavorite",
+            "code": "func (s *ArticleStore) AddFavorite(a *model.Article, u *model.User) error {\n\ttx := s.db.Begin()\n\terr := tx.Model(a).Association(\"FavoritedUsers\").Append(u).Error\n\tif err != nil {\n\t\ttx.Rollback()\n\t\treturn err\n\t}\n\terr = tx.Model(a).Update(\"favorites_count\", gorm.Expr(\"favorites_count + ?\", 1)).Error\n\tif err != nil {\n\t\ttx.Rollback()\n\t\treturn err\n\t}\n\ttx.Commit()\n\ta.FavoritesCount++\n\treturn nil\n}// AddFavorite favorite an article\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.Association.Append",
+               "github.com/jinzhu/gorm.DB.Association",
+               "github.com/jinzhu/gorm.DB.Begin",
+               "github.com/jinzhu/gorm.DB.Commit",
+               "github.com/jinzhu/gorm.DB.Model",
+               "github.com/jinzhu/gorm.DB.Rollback",
+               "github.com/jinzhu/gorm.DB.Update",
+               "github.com/jinzhu/gorm.Expr"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "Create": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.Create",
+            "code": "func (s *ArticleStore) Create(m *model.Article) error {\n\treturn s.db.Create(\u0026m).Error\n}// Create creates an article\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Create"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "CreateComment": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.CreateComment",
+            "code": "func (s *ArticleStore) CreateComment(m *model.Comment) error {\n\treturn s.db.Create(\u0026m).Error\n}// CreateComment creates a comment of the article\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Create"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "Delete": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.Delete",
+            "code": "func (s *ArticleStore) Delete(m *model.Article) error {\n\treturn s.db.Delete(m).Error\n}// Delete deletes an article\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Delete"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "DeleteComment": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.DeleteComment",
+            "code": "func (s *ArticleStore) DeleteComment(m *model.Comment) error {\n\treturn s.db.Delete(m).Error\n}// DeleteComment deletes an comment\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Delete"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "DeleteFavorite": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.DeleteFavorite",
+            "code": "func (s *ArticleStore) DeleteFavorite(a *model.Article, u *model.User) error {\n\ttx := s.db.Begin()\n\terr := tx.Model(a).Association(\"FavoritedUsers\").Delete(u).Error\n\tif err != nil {\n\t\ttx.Rollback()\n\t\treturn err\n\t}\n\terr = tx.Model(a).Update(\"favorites_count\", gorm.Expr(\"favorites_count - ?\", 1)).Error\n\tif err != nil {\n\t\ttx.Rollback()\n\t\treturn err\n\t}\n\ttx.Commit()\n\ta.FavoritesCount--\n\treturn nil\n}// DeleteFavorite unfavorite an article\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.Association.Delete",
+               "github.com/jinzhu/gorm.DB.Association",
+               "github.com/jinzhu/gorm.DB.Begin",
+               "github.com/jinzhu/gorm.DB.Commit",
+               "github.com/jinzhu/gorm.DB.Model",
+               "github.com/jinzhu/gorm.DB.Rollback",
+               "github.com/jinzhu/gorm.DB.Update",
+               "github.com/jinzhu/gorm.Expr"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "GetArticles": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.GetArticles",
+            "code": "func (s *ArticleStore) GetArticles(tagName, username string, favoritedBy *model.User, limit, offset int64) ([ // GetArticles get global articles\n]model.Article, error) {\n\td := s.db.Preload(\"Author\")\n\tif username != \"\" {\n\t\td = d.Joins(\"join users on articles.user_id = users.id\").Where(\"users.username = ?\", username)\n\t}\n\tif tagName != \"\" {\n\t\td = d.Joins(\"join article_tags on articles.id = article_tags.article_id \"+\"join tags on tags.id = article_tags.tag_id\").Where(\"tags.name = ?\", tagName)\n\t}\n\tif favoritedBy != nil {\n\t\trows, err := s.db.Select(\"article_id\").Table(\"favorite_articles\").Where(\"user_id = ?\", favoritedBy.ID).Offset(offset).Limit(limit).Rows()\n\t\tif err != nil {\n\t\t\treturn []model.Article{}, err\n\t\t}\n\t\tdefer rows.Close()\n\t\tvar ids []uint\n\t\tfor rows.Next() {\n\t\t\tvar id uint\n\t\t\trows.Scan(\u0026id)\n\t\t\tids = append(ids, id)\n\t\t}\n\t\td = d.Where(\"id in (?)\", ids)\n\t}\n\td = d.Offset(offset).Limit(limit)\n\tvar as []model.Article\n\terr := d.Find(\u0026as).Error\n\treturn as, err\n}",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find",
+               "github.com/jinzhu/gorm.DB.Joins",
+               "github.com/jinzhu/gorm.DB.Limit",
+               "github.com/jinzhu/gorm.DB.Offset",
+               "github.com/jinzhu/gorm.DB.Preload",
+               "github.com/jinzhu/gorm.DB.Rows",
+               "github.com/jinzhu/gorm.DB.Select",
+               "github.com/jinzhu/gorm.DB.Table",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "GetByID": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.GetByID",
+            "code": "func (s *ArticleStore) GetByID(id uint) (*model.Article, error) {\n\tvar m model.Article\n\terr := s.db.Preload(\"Tags\").Preload(\"Author\").Find(\u0026m, id).Error\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\treturn \u0026m, nil\n}// GetByID finds an article from id\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find",
+               "github.com/jinzhu/gorm.DB.Preload"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "GetCommentByID": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.GetCommentByID",
+            "code": "func (s *ArticleStore) GetCommentByID(id uint) (*model.Comment, error) {\n\tvar m model.Comment\n\terr := s.db.Find(\u0026m, id).Error\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\treturn \u0026m, nil\n}// GetCommentByID finds an comment from id\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "GetComments": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.GetComments",
+            "code": "func (s *ArticleStore) GetComments(m *model.Article) ([ // GetComments gets coments of the article\n]model.Comment, error) {\n\tvar cs []model.Comment\n\terr := s.db.Preload(\"Author\").Where(\"article_id = ?\", m.ID).Find(\u0026cs).Error\n\tif err != nil {\n\t\treturn cs, err\n\t}\n\treturn cs, nil\n}",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find",
+               "github.com/jinzhu/gorm.DB.Preload",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "GetFeedArticles": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.GetFeedArticles",
+            "code": "func (s *ArticleStore) GetFeedArticles(userIDs [ // GetFeedArticles returns following users' articles\n]uint, limit, offset int64) ([]model.Article, error) {\n\td := s.db.Preload(\"Author\").Where(\"user_id in (?)\", userIDs)\n\td = d.Offset(offset).Limit(limit)\n\tvar as []model.Article\n\terr := d.Find(\u0026as).Error\n\treturn as, err\n}",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find",
+               "github.com/jinzhu/gorm.DB.Limit",
+               "github.com/jinzhu/gorm.DB.Offset",
+               "github.com/jinzhu/gorm.DB.Preload",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "GetTags": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.GetTags",
+            "code": "func (s *ArticleStore) GetTags() ([ // GetTags creates a article tag\n]model.Tag, error) {\n\tvar tags []model.Tag\n\tif err := s.db.Find(\u0026tags).Error; err != nil {\n\t\treturn tags, err\n\t}\n\treturn tags, nil\n}",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "IsFavorited": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.IsFavorited",
+            "code": "func (s *ArticleStore) IsFavorited(a *model.Article, u *model.User) (bool, error) {\n\tif a == nil || u == nil {\n\t\treturn false, nil\n\t}\n\tvar count int\n\terr := s.db.Table(\"favorite_articles\").Where(\"article_id = ? AND user_id = ?\", a.ID, u.ID).Count(\u0026count).Error\n\tif err != nil {\n\t\treturn false, err\n\t}\n\treturn count \u003e 0, nil\n}// IsFavorited returns whether the article is favorited by the user\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Count",
+               "github.com/jinzhu/gorm.DB.Table",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         },
+         "NewArticleStore": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.NewArticleStore",
+            "code": "func NewArticleStore(db *gorm.DB) *ArticleStore {\n\treturn \u0026ArticleStore{db: db}\n}// NewArticleStore returns a new ArticleStore\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.CallbackProcessor",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.Scope",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/jinzhu/gorm.searchPreload",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": ""
+         },
+         "Update": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore.Update",
+            "code": "func (s *ArticleStore) Update(m *model.Article) error {\n\treturn s.db.Model(\u0026m).Update(\u0026m).Error\n}// Update updates an article\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Model",
+               "github.com/jinzhu/gorm.DB.Update"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "ArticleStore"
+         }
+      },
+      "struct_dict": {
+         "github.com/jinzhu/gorm.Callback": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+            "definition": "type Callback struct {\n\tlogger     logger\n\tcreates    []*func(scope *Scope)\n\tupdates    []*func(scope *Scope)\n\tdeletes    []*func(scope *Scope)\n\tqueries    []*func(scope *Scope)\n\trowQueries []*func(scope *Scope)\n\tprocessors []*CallbackProcessor\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.CallbackProcessor": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+            "definition": "type CallbackProcessor struct {\n\tlogger    logger\n\tname      string              // current callback's name\n\tbefore    string              // register current callback before a callback\n\tafter     string              // register current callback after a callback\n\treplace   bool                // replace callbacks with same name\n\tremove    bool                // delete callbacks with same name\n\tkind      string              // callback type: create, update, delete, query, row_query\n\tprocessor *func(scope *Scope) // callback handler\n\tparent    *Callback\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.DB": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+            "definition": "type DB struct {\n\tsync.RWMutex\n\tValue        interface{}\n\tError        error\n\tRowsAffected int64\n\n\t// single db\n\tdb                SQLCommon\n\tblockGlobalUpdate bool\n\tlogMode           logModeValue\n\tlogger            logger\n\tsearch            *search\n\tvalues            sync.Map\n\n\t// global db\n\tparent        *DB\n\tcallbacks     *Callback\n\tdialect       Dialect\n\tsingularTable bool\n\n\t// function to be used to override the creating of a new timestamp\n\tnowFuncOverride func() time.Time\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.Dialect": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+            "definition": "type Dialect interface {\n\t// GetName get dialect's name\n\tGetName() string\n\n\t// SetDB set db for dialect\n\tSetDB(db SQLCommon)\n\n\t// BindVar return the placeholder for actual values in SQL statements, in many dbs it is \"?\", Postgres using $1\n\tBindVar(i int) string\n\t// Quote quotes field name to avoid SQL parsing exceptions by using a reserved word as a field name\n\tQuote(key string) string\n\t// DataTypeOf return data's sql type\n\tDataTypeOf(field *StructField) string\n\n\t// HasIndex check has index or not\n\tHasIndex(tableName string, indexName string) bool\n\t// HasForeignKey check has foreign key or not\n\tHasForeignKey(tableName string, foreignKeyName string) bool\n\t// RemoveIndex remove index\n\tRemoveIndex(tableName string, indexName string) error\n\t// HasTable check has table or not\n\tHasTable(tableName string) bool\n\t// HasColumn check has column or not\n\tHasColumn(tableName string, columnName string) bool\n\t// ModifyColumn modify column's type\n\tModifyColumn(tableName string, columnName string, typ string) error\n\n\t// LimitAndOffsetSQL return generated SQL with Limit and Offset, as mssql has special case\n\tLimitAndOffsetSQL(limit, offset interface{}) (string, error)\n\t// SelectFromDummyTable return select values, for most dbs, `SELECT values` just works, mysql needs `SELECT value FROM DUAL`\n\tSelectFromDummyTable() string\n\t// LastInsertIDOutputInterstitial most dbs support LastInsertId, but mssql needs to use `OUTPUT`\n\tLastInsertIDOutputInterstitial(tableName, columnName string, columns []string) string\n\t// LastInsertIdReturningSuffix most dbs support LastInsertId, but postgres needs to use `RETURNING`\n\tLastInsertIDReturningSuffix(tableName, columnName string) string\n\t// DefaultValueStr\n\tDefaultValueStr() string\n\n\t// BuildKeyName returns a valid key name (foreign key, index key) for the given table, field and reference\n\tBuildKeyName(kind, tableName string, fields ...string) string\n\n\t// NormalizeIndexAndColumn returns valid index name and column name depending on each dialect\n\tNormalizeIndexAndColumn(indexName, columnName string) (string, string)\n\n\t// CurrentDatabase return current database name\n\tCurrentDatabase() string\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.Model": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+            "definition": "type Model struct {\n\tID        uint `gorm:\"primary_key\"`\n\tCreatedAt time.Time\n\tUpdatedAt time.Time\n\tDeletedAt *time.Time `sql:\"index\"`\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.SQLCommon": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+            "definition": "type SQLCommon interface {\n\tExec(query string, args ...interface{}) (sql.Result, error)\n\tPrepare(query string) (*sql.Stmt, error)\n\tQuery(query string, args ...interface{}) (*sql.Rows, error)\n\tQueryRow(query string, args ...interface{}) *sql.Row\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.Scope": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+            "definition": "type Scope struct {\n\tSearch          *search\n\tValue           interface{}\n\tSQL             string\n\tSQLVars         []interface{}\n\tdb              *DB\n\tinstanceID      string\n\tprimaryKeyField *Field\n\tskipLeft        bool\n\tfields          *[]*Field\n\tselectAttrs     *[]string\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.logModeValue": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+            "definition": "type logModeValue int\n\nconst (\n\tdefaultLogMode logModeValue = iota\n\tnoLogMode\n\tdetailedLogMode\n)",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.logger": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+            "definition": "type logger interface {\n\tPrint(v ...interface{})\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.search": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+            "definition": "type search struct {\n\tdb               *DB\n\twhereConditions  []map[string]interface{}\n\torConditions     []map[string]interface{}\n\tnotConditions    []map[string]interface{}\n\thavingConditions []map[string]interface{}\n\tjoinConditions   []map[string]interface{}\n\tinitAttrs        []interface{}\n\tassignAttrs      []interface{}\n\tselects          map[string]interface{}\n\tomits            []string\n\torders           []interface{}\n\tpreload          []searchPreload\n\toffset           interface{}\n\tlimit            interface{}\n\tgroup            string\n\ttableName        string\n\traw              bool\n\tUnscoped         bool\n\tignoreOrderQuery bool\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.searchPreload": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+            "definition": "type searchPreload struct {\n\tschema     string\n\tconditions []interface{}\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.Article": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+            "definition": "type Article struct {\n\tgorm.Model\n\tTitle          string `gorm:\"not null\"`\n\tDescription    string `gorm:\"not null\"`\n\tBody           string `gorm:\"not null\"`\n\tTags           []Tag  `gorm:\"many2many:article_tags\"`\n\tAuthor         User   `gorm:\"foreignkey:UserID\"`\n\tUserID         uint   `gorm:\"not null\"`\n\tFavoritesCount int32  `gorm:\"not null;default=0\"`\n\tFavoritedUsers []User `gorm:\"many2many:favorite_articles\"`\n\tComments       []Comment\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.Comment": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+            "definition": "type Comment struct {\n\tgorm.Model\n\tBody      string `gorm:\"not null\"`\n\tUserID    uint   `gorm:\"not null\"`\n\tAuthor    User   `gorm:\"foreignkey:UserID\"`\n\tArticleID uint   `gorm:\"not null\"`\n\tArticle   Article\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.Tag": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+            "definition": "type Tag struct {\n\tgorm.Model\n\tName string `gorm:\"not null\"`\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.User": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+            "definition": "type User struct {\n\tgorm.Model\n\tUsername         string    `gorm:\"unique_index;not null\"`\n\tEmail            string    `gorm:\"unique_index;not null\"`\n\tPassword         string    `gorm:\"not null\"`\n\tBio              string    `gorm:\"not null\"`\n\tImage            string    `gorm:\"not null\"`\n\tFollows          []User    `gorm:\"many2many:follows;jointable_foreignkey:from_user_id;association_jointable_foreignkey:to_user_id\"`\n\tFavoriteArticles []Article `gorm:\"many2many:favorite_articles;\"`\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+            "definition": "type ArticleStore struct {\n\tdb *gorm.DB\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/store.UserStore": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go",
+            "definition": "type UserStore struct {\n\tdb *gorm.DB\n}",
+            "is_mock": false
+         }
+      },
+      "imports_dict": {
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\utils.go": "package github.com/jinzhu/gorm\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go": "package github.com/raahii/golang-grpc-realworld-example/model\nimport (\n\tvalidation \"github.com/go-ozzo/ozzo-validation\"\n\t\"github.com/jinzhu/gorm\"\n\tpb \"github.com/raahii/golang-grpc-realworld-example/proto\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go": "package github.com/raahii/golang-grpc-realworld-example/model\nimport (\n\tvalidation \"github.com/go-ozzo/ozzo-validation\"\n\t\"github.com/jinzhu/gorm\"\n\tpb \"github.com/raahii/golang-grpc-realworld-example/proto\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go": "package github.com/raahii/golang-grpc-realworld-example/model\nimport (\n\tvalidation \"github.com/go-ozzo/ozzo-validation\"\n\t\"github.com/go-ozzo/ozzo-validation/is\"\n\t\"github.com/jinzhu/gorm\"\n\tpb \"github.com/raahii/golang-grpc-realworld-example/proto\"\n\t\"golang.org/x/crypto/bcrypt\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go": "package github.com/raahii/golang-grpc-realworld-example/store\nimport (\n\t\"github.com/jinzhu/gorm\"\n\t\"github.com/raahii/golang-grpc-realworld-example/model\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go": "package github.com/raahii/golang-grpc-realworld-example/store\nimport (\n\t\"github.com/jinzhu/gorm\"\n\t\"github.com/raahii/golang-grpc-realworld-example/model\"\n)\n"
+      },
+      "package_dict": {
+         "gorm": "github.com/jinzhu/gorm",
+         "model": "github.com/raahii/golang-grpc-realworld-example/model"
+      },
+      "package_name": "github.com/raahii/golang-grpc-realworld-example/store",
+      "imports": "github.com/jinzhu/gorm\ngithub.com/raahii/golang-grpc-realworld-example/model\n",
+      "init_functions": [],
+      "associated_function_dict": {
+         "github.com/jinzhu/gorm.Association.Append": "func (association *Association) Append(values ...interface{}) *Association {\n\tif association.Error != nil {\n\t\treturn association\n\t}\n\n\tif relationship := association.field.Relationship; relationship.Kind == \"has_one\" {\n\t\treturn association.Replace(values...)\n\t}\n\treturn association.saveAssociations(values...)\n}",
+         "github.com/jinzhu/gorm.Association.Delete": "func (association *Association) Delete(values ...interface{}) *Association {\n\tif association.Error != nil {\n\t\treturn association\n\t}\n\n\tvar (\n\t\trelationship = association.field.Relationship\n\t\tscope        = association.scope\n\t\tfield        = association.field.Field\n\t\tnewDB        = scope.NewDB()\n\t)\n\n\tif len(values) == 0 {\n\t\treturn association\n\t}\n\n\tvar deletingResourcePrimaryFieldNames, deletingResourcePrimaryDBNames []string\n\tfor _, field := range scope.New(reflect.New(field.Type()).Interface()).PrimaryFields() {\n\t\tdeletingResourcePrimaryFieldNames = append(deletingResourcePrimaryFieldNames, field.Name)\n\t\tdeletingResourcePrimaryDBNames = append(deletingResourcePrimaryDBNames, field.DBName)\n\t}\n\n\tdeletingPrimaryKeys := scope.getColumnAsArray(deletingResourcePrimaryFieldNames, values...)\n\n\tif relationship.Kind == \"many_to_many\" {\n\t\t// source value's foreign keys\n\t\tfor idx, foreignKey := range relationship.ForeignDBNames {\n\t\t\tif field, ok := scope.FieldByName(relationship.ForeignFieldNames[idx]); ok {\n\t\t\t\tnewDB = newDB.Where(fmt.Sprintf(\"%v = ?\", scope.Quote(foreignKey)), field.Field.Interface())\n\t\t\t}\n\t\t}\n\n\t\t// get association's foreign fields name\n\t\tvar associationScope = scope.New(reflect.New(field.Type()).Interface())\n\t\tvar associationForeignFieldNames []string\n\t\tfor _, associationDBName := range relationship.AssociationForeignFieldNames {\n\t\t\tif field, ok := associationScope.FieldByName(associationDBName); ok {\n\t\t\t\tassociationForeignFieldNames = append(associationForeignFieldNames, field.Name)\n\t\t\t}\n\t\t}\n\n\t\t// association value's foreign keys\n\t\tdeletingPrimaryKeys := scope.getColumnAsArray(associationForeignFieldNames, values...)\n\t\tsql := fmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, relationship.AssociationForeignDBNames), toQueryMarks(deletingPrimaryKeys))\n\t\tnewDB = newDB.Where(sql, toQueryValues(deletingPrimaryKeys)...)\n\n\t\tassociation.setErr(relationship.JoinTableHandler.Delete(relationship.JoinTableHandler, newDB))\n\t} else {\n\t\tvar foreignKeyMap = map[string]interface{}{}\n\t\tfor _, foreignKey := range relationship.ForeignDBNames {\n\t\t\tforeignKeyMap[foreignKey] = nil\n\t\t}\n\n\t\tif relationship.Kind == \"belongs_to\" {\n\t\t\t// find with deleting relation's foreign keys\n\t\t\tprimaryKeys := scope.getColumnAsArray(relationship.AssociationForeignFieldNames, values...)\n\t\t\tnewDB = newDB.Where(\n\t\t\t\tfmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, relationship.ForeignDBNames), toQueryMarks(primaryKeys)),\n\t\t\t\ttoQueryValues(primaryKeys)...,\n\t\t\t)\n\n\t\t\t// set foreign key to be null if there are some records affected\n\t\t\tmodelValue := reflect.New(scope.GetModelStruct().ModelType).Interface()\n\t\t\tif results := newDB.Model(modelValue).UpdateColumn(foreignKeyMap); results.Error == nil {\n\t\t\t\tif results.RowsAffected \u003e 0 {\n\t\t\t\t\tscope.updatedAttrsWithValues(foreignKeyMap)\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\tassociation.setErr(results.Error)\n\t\t\t}\n\t\t} else if relationship.Kind == \"has_one\" || relationship.Kind == \"has_many\" {\n\t\t\t// find all relations\n\t\t\tprimaryKeys := scope.getColumnAsArray(relationship.AssociationForeignFieldNames, scope.Value)\n\t\t\tnewDB = newDB.Where(\n\t\t\t\tfmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, relationship.ForeignDBNames), toQueryMarks(primaryKeys)),\n\t\t\t\ttoQueryValues(primaryKeys)...,\n\t\t\t)\n\n\t\t\t// only include those deleting relations\n\t\t\tnewDB = newDB.Where(\n\t\t\t\tfmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, deletingResourcePrimaryDBNames), toQueryMarks(deletingPrimaryKeys)),\n\t\t\t\ttoQueryValues(deletingPrimaryKeys)...,\n\t\t\t)\n\n\t\t\t// set matched relation's foreign key to be null\n\t\t\tfieldValue := reflect.New(association.field.Field.Type()).Interface()\n\t\t\tassociation.setErr(newDB.Model(fieldValue).UpdateColumn(foreignKeyMap).Error)\n\t\t}\n\t}\n\n\t// Remove deleted records from source's field\n\tif association.Error == nil {\n\t\tif field.Kind() == reflect.Slice {\n\t\t\tleftValues := reflect.Zero(field.Type())\n\n\t\t\tfor i := 0; i \u003c field.Len(); i++ {\n\t\t\t\treflectValue := field.Index(i)\n\t\t\t\tprimaryKey := scope.getColumnAsArray(deletingResourcePrimaryFieldNames, reflectValue.Interface())[0]\n\t\t\t\tvar isDeleted = false\n\t\t\t\tfor _, pk := range deletingPrimaryKeys {\n\t\t\t\t\tif equalAsString(primaryKey, pk) {\n\t\t\t\t\t\tisDeleted = true\n\t\t\t\t\t\tbreak\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tif !isDeleted {\n\t\t\t\t\tleftValues = reflect.Append(leftValues, reflectValue)\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tassociation.field.Set(leftValues)\n\t\t} else if field.Kind() == reflect.Struct {\n\t\t\tprimaryKey := scope.getColumnAsArray(deletingResourcePrimaryFieldNames, field.Interface())[0]\n\t\t\tfor _, pk := range deletingPrimaryKeys {\n\t\t\t\tif equalAsString(primaryKey, pk) {\n\t\t\t\t\tassociation.field.Set(reflect.Zero(field.Type()))\n\t\t\t\t\tbreak\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn association\n}",
+         "github.com/jinzhu/gorm.DB.Association": "func (s *DB) Association(column string) *Association {\n\tvar err error\n\tvar scope = s.Set(\"gorm:association:source\", s.Value).NewScope(s.Value)\n\n\tif primaryField := scope.PrimaryField(); primaryField.IsBlank {\n\t\terr = errors.New(\"primary key can't be nil\")\n\t} else {\n\t\tif field, ok := scope.FieldByName(column); ok {\n\t\t\tif field.Relationship == nil || len(field.Relationship.ForeignFieldNames) == 0 {\n\t\t\t\terr = fmt.Errorf(\"invalid association %v for %v\", column, scope.IndirectValue().Type())\n\t\t\t} else {\n\t\t\t\treturn \u0026Association{scope: scope, column: column, field: field}\n\t\t\t}\n\t\t} else {\n\t\t\terr = fmt.Errorf(\"%v doesn't have column %v\", scope.IndirectValue().Type(), column)\n\t\t}\n\t}\n\n\treturn \u0026Association{Error: err}\n}",
+         "github.com/jinzhu/gorm.DB.Begin": "func (s *DB) Begin() *DB {\n\treturn s.BeginTx(context.Background(), \u0026sql.TxOptions{})\n}",
+         "github.com/jinzhu/gorm.DB.Commit": "func (s *DB) Commit() *DB {\n\tvar emptySQLTx *sql.Tx\n\tif db, ok := s.db.(sqlTx); ok \u0026\u0026 db != nil \u0026\u0026 db != emptySQLTx {\n\t\ts.AddError(db.Commit())\n\t} else {\n\t\ts.AddError(ErrInvalidTransaction)\n\t}\n\treturn s\n}",
+         "github.com/jinzhu/gorm.DB.Count": "func (s *DB) Count(value interface{}) *DB {\n\treturn s.NewScope(s.Value).count(value).db\n}",
+         "github.com/jinzhu/gorm.DB.Create": "func (s *DB) Create(value interface{}) *DB {\n\tscope := s.NewScope(value)\n\treturn scope.callCallbacks(s.parent.callbacks.creates).db\n}",
+         "github.com/jinzhu/gorm.DB.Delete": "func (s *DB) Delete(value interface{}, where ...interface{}) *DB {\n\treturn s.NewScope(value).inlineCondition(where...).callCallbacks(s.parent.callbacks.deletes).db\n}",
+         "github.com/jinzhu/gorm.DB.Find": "func (s *DB) Find(out interface{}, where ...interface{}) *DB {\n\treturn s.NewScope(out).inlineCondition(where...).callCallbacks(s.parent.callbacks.queries).db\n}",
+         "github.com/jinzhu/gorm.DB.Joins": "func (s *DB) Joins(query string, args ...interface{}) *DB {\n\treturn s.clone().search.Joins(query, args...).db\n}",
+         "github.com/jinzhu/gorm.DB.Limit": "func (s *DB) Limit(limit interface{}) *DB {\n\treturn s.clone().search.Limit(limit).db\n}",
+         "github.com/jinzhu/gorm.DB.Model": "func (s *DB) Model(value interface{}) *DB {\n\tc := s.clone()\n\tc.Value = value\n\treturn c\n}",
+         "github.com/jinzhu/gorm.DB.Offset": "func (s *DB) Offset(offset interface{}) *DB {\n\treturn s.clone().search.Offset(offset).db\n}",
+         "github.com/jinzhu/gorm.DB.Preload": "func (s *DB) Preload(column string, conditions ...interface{}) *DB {\n\treturn s.clone().search.Preload(column, conditions...).db\n}",
+         "github.com/jinzhu/gorm.DB.Rollback": "func (s *DB) Rollback() *DB {\n\tvar emptySQLTx *sql.Tx\n\tif db, ok := s.db.(sqlTx); ok \u0026\u0026 db != nil \u0026\u0026 db != emptySQLTx {\n\t\tif err := db.Rollback(); err != nil \u0026\u0026 err != sql.ErrTxDone {\n\t\t\ts.AddError(err)\n\t\t}\n\t} else {\n\t\ts.AddError(ErrInvalidTransaction)\n\t}\n\treturn s\n}",
+         "github.com/jinzhu/gorm.DB.Rows": "func (s *DB) Rows() (*sql.Rows, error) {\n\treturn s.NewScope(s.Value).rows()\n}",
+         "github.com/jinzhu/gorm.DB.Select": "func (s *DB) Select(query interface{}, args ...interface{}) *DB {\n\treturn s.clone().search.Select(query, args...).db\n}",
+         "github.com/jinzhu/gorm.DB.Table": "func (s *DB) Table(name string) *DB {\n\tclone := s.clone()\n\tclone.search.Table(name)\n\tclone.Value = nil\n\treturn clone\n}",
+         "github.com/jinzhu/gorm.DB.Update": "func (s *DB) Update(attrs ...interface{}) *DB {\n\treturn s.Updates(toSearchableMap(attrs...), true)\n}",
+         "github.com/jinzhu/gorm.DB.Where": "func (s *DB) Where(query interface{}, args ...interface{}) *DB {\n\treturn s.clone().search.Where(query, args...).db\n}",
+         "github.com/jinzhu/gorm.Expr": "func Expr(expression string, args ...interface{}) *SqlExpr {\n\treturn \u0026SqlExpr{expr: expression, args: args}\n}"
+      },
+      "ast_version": ""
+   },
+   "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article_test.go": {
+      "file_level_types": [],
+      "file_level_consts": [],
+      "file_level_vars": [],
+      "function_dict": {
+         "TestArticleStoreAddFavorite": {
+            "resolved": "warning: GOPATH set to GOROOT (C:\\Users\\aksha\\go) has no effect\ngithub.com/raahii/golang-grpc-realworld-example/store.TestArticleStoreAddFavorite",
+            "code": "func TestArticleStoreAddFavorite(t *testing.T) {\n\tdb, mock, err := sqlmock.New()\n\tif err != nil {\n\t\tt.Fatalf(\"an error %v occurred when opening a stub database connection\", err)\n\t}\n\n\tgormDB, err := gorm.Open(\"postgres\", db)\n\tif err != nil {\n\t\tt.Fatalf(\"an error %v occurred when opening gorm database\", err)\n\t}\n\n\tstore := \u0026ArticleStore{db: gormDB}\n\n\ttype testdata struct {\n\t\tArticle  *model.Article\n\t\tUser     *model.User\n\t\tErr      error\n\t\tScenario string\n\t}\n\n\ttests := []testdata{\n\t\t{\n\t\t\tArticle:  \u0026model.Article{Model: gorm.Model{ID: 1}},\n\t\t\tUser:     \u0026model.User{Model: gorm.Model{ID: 1}},\n\t\t\tErr:      nil,\n\t\t\tScenario: \"Successfully Adding a Favorite Article to a User's List\",\n\t\t},\n\t\t{\n\t\t\tArticle:  \u0026model.Article{Model: gorm.Model{ID: 2}},\n\t\t\tUser:     \u0026model.User{Model: gorm.Model{ID: 2}},\n\t\t\tErr:      gorm.ErrRecordNotFound,\n\t\t\tScenario: \"Rollback on Append Failure\",\n\t\t},\n\t\t{\n\t\t\tArticle:  \u0026model.Article{Model: gorm.Model{ID: 3}},\n\t\t\tUser:     \u0026model.User{Model: gorm.Model{ID: 3}},\n\t\t\tErr:      gorm.ErrRecordNotFound,\n\t\t\tScenario: \"Rollback on Update Failure\",\n\t\t},\n\t\t{\n\t\t\tArticle:  \u0026model.Article{Model: gorm.Model{ID: 4}},\n\t\t\tUser:     \u0026model.User{Model: gorm.Model{ID: 4}},\n\t\t\tErr:      nil,\n\t\t\tScenario: \"Increment of FavoritesCount in Successful Operation\",\n\t\t},\n\t}\n\n\tfor _, test := range tests {\n\t\tt.Run(test.Scenario, func(t *testing.T) {\n\t\t\ttype testQuery struct {\n\t\t\t\tQuery string\n\t\t\t\tArgs  []driver.Value\n\t\t\t\tRows  *sqlmock.Rows\n\t\t\t}\n\n\t\t\ttestQueries := []testQuery{\n\t\t\t\t{\n\t\t\t\t\tQuery: \"SELECT * FROM articles WHERE id = \\\\?\",\n\t\t\t\t\tArgs:  []driver.Value{test.Article.ID},\n\t\t\t\t\tRows:  sqlmock.NewRows([]string{\"id\"}).AddRow(test.Article.ID),\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tQuery: \"SELECT * FROM users WHERE id = \\\\?\",\n\t\t\t\t\tArgs:  []driver.Value{test.User.ID},\n\t\t\t\t\tRows:  sqlmock.NewRows([]string{\"id\"}).AddRow(test.User.ID),\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tQuery: \"INSERT INTO favorites (user_id, article_id) VALUES (?, ?)\",\n\t\t\t\t\tArgs:  []driver.Value{test.User.ID, test.Article.ID},\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tQuery: \"UPDATE articles SET favorites_count = favorites_count + 1 WHERE id = ?\",\n\t\t\t\t\tArgs:  []driver.Value{test.Article.ID},\n\t\t\t\t},\n\t\t\t}\n\n\t\t\tfor _, q := range testQueries {\n\t\t\t\tmock.ExpectQuery(q.Query).WithArgs(q.Args...).WillReturnRows(q.Rows)\n\t\t\t}\n\n\t\t\terr = store.AddFavorite(test.Article, test.User)\n\t\t\tif !errors.Is(err, test.Err) {\n\t\t\t\tt.Errorf(\"expected %v, but got %v\", test.Err, err)\n\t\t\t}\n\t\t\tif err == nil \u0026\u0026 test.Article.FavoritesCount != 1 {\n\t\t\t\tt.Errorf(\"expected favorites count to be equal 1, but got %d\", test.Article.FavoritesCount)\n\t\t\t}\n\t\t})\n\t}\n}",
+            "is_file_function": true,
+            "associated_struct": [],
+            "associated_func": [
+               "github.com/jinzhu/gorm.Open"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go"
+            ],
+            "test_exists": false,
+            "test_functions": null,
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": ""
+         }
+      },
+      "struct_dict": {},
+      "imports_dict": {},
+      "package_dict": {
+         "driver": "database/sql/driver",
+         "errors": "errors",
+         "go-sqlmock": "github.com/DATA-DOG/go-sqlmock",
+         "gorm": "github.com/jinzhu/gorm",
+         "model": "github.com/raahii/golang-grpc-realworld-example/model",
+         "testing": "testing"
+      },
+      "package_name": "warning: GOPATH set to GOROOT (C:\\Users\\aksha\\go) has no effect\ngithub.com/raahii/golang-grpc-realworld-example/store\n",
+      "imports": "import (\n\t\"database/sql/driver\"\n\t\"errors\"\n\t\"testing\"\n\t\"github.com/DATA-DOG/go-sqlmock\"\n\t\"github.com/jinzhu/gorm\"\n\t\"github.com/raahii/golang-grpc-realworld-example/model\"\n)\n",
+      "init_functions": [],
+      "associated_function_dict": {
+         "github.com/jinzhu/gorm.Open": "func Open(dialect string, args ...interface{}) (db *DB, err error) {\n\tif len(args) == 0 {\n\t\terr = errors.New(\"invalid database source\")\n\t\treturn nil, err\n\t}\n\tvar source string\n\tvar dbSQL SQLCommon\n\tvar ownDbSQL bool\n\n\tswitch value := args[0].(type) {\n\tcase string:\n\t\tvar driver = dialect\n\t\tif len(args) == 1 {\n\t\t\tsource = value\n\t\t} else if len(args) \u003e= 2 {\n\t\t\tdriver = value\n\t\t\tsource = args[1].(string)\n\t\t}\n\t\tdbSQL, err = sql.Open(driver, source)\n\t\townDbSQL = true\n\tcase SQLCommon:\n\t\tdbSQL = value\n\t\townDbSQL = false\n\tdefault:\n\t\treturn nil, fmt.Errorf(\"invalid database source: %v is not a valid type\", value)\n\t}\n\n\tdb = \u0026DB{\n\t\tdb:        dbSQL,\n\t\tlogger:    defaultLogger,\n\t\tcallbacks: DefaultCallback,\n\t\tdialect:   newDialect(dialect, dbSQL),\n\t}\n\tdb.parent = db\n\tif err != nil {\n\t\treturn\n\t}\n\t// Send a ping to make sure the database connection is alive.\n\tif d, ok := dbSQL.(*sql.DB); ok {\n\t\tif err = d.Ping(); err != nil \u0026\u0026 ownDbSQL {\n\t\t\td.Close()\n\t\t}\n\t}\n\treturn\n}"
+      },
+      "ast_version": "v1.1.13"
+   },
+   "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go": {
+      "file_level_types": [
+         "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore",
+         "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+      ],
+      "file_level_consts": [],
+      "file_level_vars": [],
+      "function_dict": {
+         "Create": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.Create",
+            "code": "func (s *UserStore) Create(m *model.User) error {\n\treturn s.db.Create(m).Error\n}// Create create a user\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Create"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "Follow": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.Follow",
+            "code": "func (s *UserStore) Follow(a *model.User, b *model.User) error {\n\treturn s.db.Model(a).Association(\"Follows\").Append(b).Error\n}// Follow create follow relashionship to User B from user A\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.Association.Append",
+               "github.com/jinzhu/gorm.DB.Association",
+               "github.com/jinzhu/gorm.DB.Model"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "GetByEmail": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.GetByEmail",
+            "code": "func (s *UserStore) GetByEmail(email string) (*model.User, error) {\n\tvar m model.User\n\tif err := s.db.Where(\"email = ?\", email).First(\u0026m).Error; err != nil {\n\t\treturn nil, err\n\t}\n\treturn \u0026m, nil\n}// GetByEmail finds a user from email\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.First",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "GetByID": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.GetByID",
+            "code": "func (s *UserStore) GetByID(id uint) (*model.User, error) {\n\tvar m model.User\n\tif err := s.db.Find(\u0026m, id).Error; err != nil {\n\t\treturn nil, err\n\t}\n\treturn \u0026m, nil\n}// GetByID finds a user from id\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Find"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "GetByUsername": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.GetByUsername",
+            "code": "func (s *UserStore) GetByUsername(username string) (*model.User, error) {\n\tvar m model.User\n\tif err := s.db.Where(\"username = ?\", username).First(\u0026m).Error; err != nil {\n\t\treturn nil, err\n\t}\n\treturn \u0026m, nil\n}// GetByUsername finds a user from username\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.First",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "GetFollowingUserIDs": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.GetFollowingUserIDs",
+            "code": "func (s *UserStore) GetFollowingUserIDs(m *model.User) ([ // GetFollowingUserIDs returns user ids current user follows\n]uint, error) {\n\trows, err := s.db.Table(\"follows\").Select(\"to_user_id\").Where(\"from_user_id = ?\", m.ID).Rows()\n\tif err != nil {\n\t\treturn []uint{}, err\n\t}\n\tdefer rows.Close()\n\tvar ids []uint\n\tfor rows.Next() {\n\t\tvar id uint\n\t\trows.Scan(\u0026id)\n\t\tids = append(ids, id)\n\t}\n\treturn ids, nil\n}",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Rows",
+               "github.com/jinzhu/gorm.DB.Select",
+               "github.com/jinzhu/gorm.DB.Table",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "IsFollowing": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.IsFollowing",
+            "code": "func (s *UserStore) IsFollowing(a *model.User, b *model.User) (bool, error) {\n\tif a == nil || b == nil {\n\t\treturn false, nil\n\t}\n\tvar count int\n\terr := s.db.Table(\"follows\").Where(\"from_user_id = ? AND to_user_id = ?\", a.ID, b.ID).Count(\u0026count).Error\n\tif err != nil {\n\t\treturn false, err\n\t}\n\treturn count \u003e 0, nil\n}// IsFollowing returns whether user A follows user B or not\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Count",
+               "github.com/jinzhu/gorm.DB.Table",
+               "github.com/jinzhu/gorm.DB.Where"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "NewUserStore": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.NewUserStore",
+            "code": "func NewUserStore(db *gorm.DB) *UserStore {\n\treturn \u0026UserStore{db: db}\n}// NewUserStore returns a new UserStore\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.CallbackProcessor",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.Scope",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/jinzhu/gorm.searchPreload",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": ""
+         },
+         "Unfollow": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.Unfollow",
+            "code": "func (s *UserStore) Unfollow(a *model.User, b *model.User) error {\n\treturn s.db.Model(a).Association(\"Follows\").Delete(b).Error\n}// Unfollow delete follow relashionship to User B from user A\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.Association.Delete",
+               "github.com/jinzhu/gorm.DB.Association",
+               "github.com/jinzhu/gorm.DB.Model"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         },
+         "Update": {
+            "resolved": "github.com/raahii/golang-grpc-realworld-example/store.UserStore.Update",
+            "code": "func (s *UserStore) Update(m *model.User) error {\n\treturn s.db.Model(m).Update(m).Error\n}// Update update all of user fields\n",
+            "is_file_function": true,
+            "associated_struct": [
+               "github.com/jinzhu/gorm.Callback",
+               "github.com/jinzhu/gorm.DB",
+               "github.com/jinzhu/gorm.Dialect",
+               "github.com/jinzhu/gorm.Model",
+               "github.com/jinzhu/gorm.SQLCommon",
+               "github.com/jinzhu/gorm.logModeValue",
+               "github.com/jinzhu/gorm.logger",
+               "github.com/jinzhu/gorm.search",
+               "github.com/raahii/golang-grpc-realworld-example/model.Article",
+               "github.com/raahii/golang-grpc-realworld-example/model.Comment",
+               "github.com/raahii/golang-grpc-realworld-example/model.Tag",
+               "github.com/raahii/golang-grpc-realworld-example/model.User",
+               "github.com/raahii/golang-grpc-realworld-example/store.UserStore"
+            ],
+            "associated_func": [
+               "github.com/jinzhu/gorm.DB.Model",
+               "github.com/jinzhu/gorm.DB.Update"
+            ],
+            "dependent_files": [
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+               "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+               "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go"
+            ],
+            "test_exists": false,
+            "test_functions": {},
+            "requires_test": true,
+            "access_modifier": "public",
+            "receiver": "UserStore"
+         }
+      },
+      "struct_dict": {
+         "github.com/jinzhu/gorm.Callback": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+            "definition": "type Callback struct {\n\tlogger     logger\n\tcreates    []*func(scope *Scope)\n\tupdates    []*func(scope *Scope)\n\tdeletes    []*func(scope *Scope)\n\tqueries    []*func(scope *Scope)\n\trowQueries []*func(scope *Scope)\n\tprocessors []*CallbackProcessor\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.CallbackProcessor": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go",
+            "definition": "type CallbackProcessor struct {\n\tlogger    logger\n\tname      string              // current callback's name\n\tbefore    string              // register current callback before a callback\n\tafter     string              // register current callback after a callback\n\treplace   bool                // replace callbacks with same name\n\tremove    bool                // delete callbacks with same name\n\tkind      string              // callback type: create, update, delete, query, row_query\n\tprocessor *func(scope *Scope) // callback handler\n\tparent    *Callback\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.DB": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+            "definition": "type DB struct {\n\tsync.RWMutex\n\tValue        interface{}\n\tError        error\n\tRowsAffected int64\n\n\t// single db\n\tdb                SQLCommon\n\tblockGlobalUpdate bool\n\tlogMode           logModeValue\n\tlogger            logger\n\tsearch            *search\n\tvalues            sync.Map\n\n\t// global db\n\tparent        *DB\n\tcallbacks     *Callback\n\tdialect       Dialect\n\tsingularTable bool\n\n\t// function to be used to override the creating of a new timestamp\n\tnowFuncOverride func() time.Time\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.Dialect": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go",
+            "definition": "type Dialect interface {\n\t// GetName get dialect's name\n\tGetName() string\n\n\t// SetDB set db for dialect\n\tSetDB(db SQLCommon)\n\n\t// BindVar return the placeholder for actual values in SQL statements, in many dbs it is \"?\", Postgres using $1\n\tBindVar(i int) string\n\t// Quote quotes field name to avoid SQL parsing exceptions by using a reserved word as a field name\n\tQuote(key string) string\n\t// DataTypeOf return data's sql type\n\tDataTypeOf(field *StructField) string\n\n\t// HasIndex check has index or not\n\tHasIndex(tableName string, indexName string) bool\n\t// HasForeignKey check has foreign key or not\n\tHasForeignKey(tableName string, foreignKeyName string) bool\n\t// RemoveIndex remove index\n\tRemoveIndex(tableName string, indexName string) error\n\t// HasTable check has table or not\n\tHasTable(tableName string) bool\n\t// HasColumn check has column or not\n\tHasColumn(tableName string, columnName string) bool\n\t// ModifyColumn modify column's type\n\tModifyColumn(tableName string, columnName string, typ string) error\n\n\t// LimitAndOffsetSQL return generated SQL with Limit and Offset, as mssql has special case\n\tLimitAndOffsetSQL(limit, offset interface{}) (string, error)\n\t// SelectFromDummyTable return select values, for most dbs, `SELECT values` just works, mysql needs `SELECT value FROM DUAL`\n\tSelectFromDummyTable() string\n\t// LastInsertIDOutputInterstitial most dbs support LastInsertId, but mssql needs to use `OUTPUT`\n\tLastInsertIDOutputInterstitial(tableName, columnName string, columns []string) string\n\t// LastInsertIdReturningSuffix most dbs support LastInsertId, but postgres needs to use `RETURNING`\n\tLastInsertIDReturningSuffix(tableName, columnName string) string\n\t// DefaultValueStr\n\tDefaultValueStr() string\n\n\t// BuildKeyName returns a valid key name (foreign key, index key) for the given table, field and reference\n\tBuildKeyName(kind, tableName string, fields ...string) string\n\n\t// NormalizeIndexAndColumn returns valid index name and column name depending on each dialect\n\tNormalizeIndexAndColumn(indexName, columnName string) (string, string)\n\n\t// CurrentDatabase return current database name\n\tCurrentDatabase() string\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.Model": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go",
+            "definition": "type Model struct {\n\tID        uint `gorm:\"primary_key\"`\n\tCreatedAt time.Time\n\tUpdatedAt time.Time\n\tDeletedAt *time.Time `sql:\"index\"`\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.SQLCommon": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go",
+            "definition": "type SQLCommon interface {\n\tExec(query string, args ...interface{}) (sql.Result, error)\n\tPrepare(query string) (*sql.Stmt, error)\n\tQuery(query string, args ...interface{}) (*sql.Rows, error)\n\tQueryRow(query string, args ...interface{}) *sql.Row\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.Scope": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go",
+            "definition": "type Scope struct {\n\tSearch          *search\n\tValue           interface{}\n\tSQL             string\n\tSQLVars         []interface{}\n\tdb              *DB\n\tinstanceID      string\n\tprimaryKeyField *Field\n\tskipLeft        bool\n\tfields          *[]*Field\n\tselectAttrs     *[]string\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.logModeValue": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go",
+            "definition": "type logModeValue int\n\nconst (\n\tdefaultLogMode logModeValue = iota\n\tnoLogMode\n\tdetailedLogMode\n)",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.logger": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go",
+            "definition": "type logger interface {\n\tPrint(v ...interface{})\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.search": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+            "definition": "type search struct {\n\tdb               *DB\n\twhereConditions  []map[string]interface{}\n\torConditions     []map[string]interface{}\n\tnotConditions    []map[string]interface{}\n\thavingConditions []map[string]interface{}\n\tjoinConditions   []map[string]interface{}\n\tinitAttrs        []interface{}\n\tassignAttrs      []interface{}\n\tselects          map[string]interface{}\n\tomits            []string\n\torders           []interface{}\n\tpreload          []searchPreload\n\toffset           interface{}\n\tlimit            interface{}\n\tgroup            string\n\ttableName        string\n\traw              bool\n\tUnscoped         bool\n\tignoreOrderQuery bool\n}",
+            "is_mock": false
+         },
+         "github.com/jinzhu/gorm.searchPreload": {
+            "file": "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go",
+            "definition": "type searchPreload struct {\n\tschema     string\n\tconditions []interface{}\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.Article": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+            "definition": "type Article struct {\n\tgorm.Model\n\tTitle          string `gorm:\"not null\"`\n\tDescription    string `gorm:\"not null\"`\n\tBody           string `gorm:\"not null\"`\n\tTags           []Tag  `gorm:\"many2many:article_tags\"`\n\tAuthor         User   `gorm:\"foreignkey:UserID\"`\n\tUserID         uint   `gorm:\"not null\"`\n\tFavoritesCount int32  `gorm:\"not null;default=0\"`\n\tFavoritedUsers []User `gorm:\"many2many:favorite_articles\"`\n\tComments       []Comment\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.Comment": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go",
+            "definition": "type Comment struct {\n\tgorm.Model\n\tBody      string `gorm:\"not null\"`\n\tUserID    uint   `gorm:\"not null\"`\n\tAuthor    User   `gorm:\"foreignkey:UserID\"`\n\tArticleID uint   `gorm:\"not null\"`\n\tArticle   Article\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.Tag": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go",
+            "definition": "type Tag struct {\n\tgorm.Model\n\tName string `gorm:\"not null\"`\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/model.User": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go",
+            "definition": "type User struct {\n\tgorm.Model\n\tUsername         string    `gorm:\"unique_index;not null\"`\n\tEmail            string    `gorm:\"unique_index;not null\"`\n\tPassword         string    `gorm:\"not null\"`\n\tBio              string    `gorm:\"not null\"`\n\tImage            string    `gorm:\"not null\"`\n\tFollows          []User    `gorm:\"many2many:follows;jointable_foreignkey:from_user_id;association_jointable_foreignkey:to_user_id\"`\n\tFavoriteArticles []Article `gorm:\"many2many:favorite_articles;\"`\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/store.ArticleStore": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go",
+            "definition": "type ArticleStore struct {\n\tdb *gorm.DB\n}",
+            "is_mock": false
+         },
+         "github.com/raahii/golang-grpc-realworld-example/store.UserStore": {
+            "file": "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go",
+            "definition": "type UserStore struct {\n\tdb *gorm.DB\n}",
+            "is_mock": false
+         }
+      },
+      "imports_dict": {
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\association.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\callback.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\dialect.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\interface.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\logger.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\main.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\model.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\scope.go": "package github.com/jinzhu/gorm\n",
+         "C:\\Users\\aksha\\go\\pkg\\mod\\github.com\\jinzhu\\gorm@v1.9.12\\search.go": "package github.com/jinzhu/gorm\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\article.go": "package github.com/raahii/golang-grpc-realworld-example/model\nimport (\n\tvalidation \"github.com/go-ozzo/ozzo-validation\"\n\t\"github.com/jinzhu/gorm\"\n\tpb \"github.com/raahii/golang-grpc-realworld-example/proto\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\comment.go": "package github.com/raahii/golang-grpc-realworld-example/model\nimport (\n\tvalidation \"github.com/go-ozzo/ozzo-validation\"\n\t\"github.com/jinzhu/gorm\"\n\tpb \"github.com/raahii/golang-grpc-realworld-example/proto\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\model\\user.go": "package github.com/raahii/golang-grpc-realworld-example/model\nimport (\n\tvalidation \"github.com/go-ozzo/ozzo-validation\"\n\t\"github.com/go-ozzo/ozzo-validation/is\"\n\t\"github.com/jinzhu/gorm\"\n\tpb \"github.com/raahii/golang-grpc-realworld-example/proto\"\n\t\"golang.org/x/crypto/bcrypt\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\article.go": "package github.com/raahii/golang-grpc-realworld-example/store\nimport (\n\t\"github.com/jinzhu/gorm\"\n\t\"github.com/raahii/golang-grpc-realworld-example/model\"\n)\n",
+         "C:\\var\\tmp\\Roost\\RoostGPT\\golang-1\\ece53592-7de3-4391-a2fb-0d6935272614\\source\\golang-grpc-realworld-example\\store\\user.go": "package github.com/raahii/golang-grpc-realworld-example/store\nimport (\n\t\"github.com/jinzhu/gorm\"\n\t\"github.com/raahii/golang-grpc-realworld-example/model\"\n)\n"
+      },
+      "package_dict": {
+         "gorm": "github.com/jinzhu/gorm",
+         "model": "github.com/raahii/golang-grpc-realworld-example/model"
+      },
+      "package_name": "github.com/raahii/golang-grpc-realworld-example/store",
+      "imports": "github.com/jinzhu/gorm\ngithub.com/raahii/golang-grpc-realworld-example/model\n",
+      "init_functions": [],
+      "associated_function_dict": {
+         "github.com/jinzhu/gorm.Association.Append": "func (association *Association) Append(values ...interface{}) *Association {\n\tif association.Error != nil {\n\t\treturn association\n\t}\n\n\tif relationship := association.field.Relationship; relationship.Kind == \"has_one\" {\n\t\treturn association.Replace(values...)\n\t}\n\treturn association.saveAssociations(values...)\n}",
+         "github.com/jinzhu/gorm.Association.Delete": "func (association *Association) Delete(values ...interface{}) *Association {\n\tif association.Error != nil {\n\t\treturn association\n\t}\n\n\tvar (\n\t\trelationship = association.field.Relationship\n\t\tscope        = association.scope\n\t\tfield        = association.field.Field\n\t\tnewDB        = scope.NewDB()\n\t)\n\n\tif len(values) == 0 {\n\t\treturn association\n\t}\n\n\tvar deletingResourcePrimaryFieldNames, deletingResourcePrimaryDBNames []string\n\tfor _, field := range scope.New(reflect.New(field.Type()).Interface()).PrimaryFields() {\n\t\tdeletingResourcePrimaryFieldNames = append(deletingResourcePrimaryFieldNames, field.Name)\n\t\tdeletingResourcePrimaryDBNames = append(deletingResourcePrimaryDBNames, field.DBName)\n\t}\n\n\tdeletingPrimaryKeys := scope.getColumnAsArray(deletingResourcePrimaryFieldNames, values...)\n\n\tif relationship.Kind == \"many_to_many\" {\n\t\t// source value's foreign keys\n\t\tfor idx, foreignKey := range relationship.ForeignDBNames {\n\t\t\tif field, ok := scope.FieldByName(relationship.ForeignFieldNames[idx]); ok {\n\t\t\t\tnewDB = newDB.Where(fmt.Sprintf(\"%v = ?\", scope.Quote(foreignKey)), field.Field.Interface())\n\t\t\t}\n\t\t}\n\n\t\t// get association's foreign fields name\n\t\tvar associationScope = scope.New(reflect.New(field.Type()).Interface())\n\t\tvar associationForeignFieldNames []string\n\t\tfor _, associationDBName := range relationship.AssociationForeignFieldNames {\n\t\t\tif field, ok := associationScope.FieldByName(associationDBName); ok {\n\t\t\t\tassociationForeignFieldNames = append(associationForeignFieldNames, field.Name)\n\t\t\t}\n\t\t}\n\n\t\t// association value's foreign keys\n\t\tdeletingPrimaryKeys := scope.getColumnAsArray(associationForeignFieldNames, values...)\n\t\tsql := fmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, relationship.AssociationForeignDBNames), toQueryMarks(deletingPrimaryKeys))\n\t\tnewDB = newDB.Where(sql, toQueryValues(deletingPrimaryKeys)...)\n\n\t\tassociation.setErr(relationship.JoinTableHandler.Delete(relationship.JoinTableHandler, newDB))\n\t} else {\n\t\tvar foreignKeyMap = map[string]interface{}{}\n\t\tfor _, foreignKey := range relationship.ForeignDBNames {\n\t\t\tforeignKeyMap[foreignKey] = nil\n\t\t}\n\n\t\tif relationship.Kind == \"belongs_to\" {\n\t\t\t// find with deleting relation's foreign keys\n\t\t\tprimaryKeys := scope.getColumnAsArray(relationship.AssociationForeignFieldNames, values...)\n\t\t\tnewDB = newDB.Where(\n\t\t\t\tfmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, relationship.ForeignDBNames), toQueryMarks(primaryKeys)),\n\t\t\t\ttoQueryValues(primaryKeys)...,\n\t\t\t)\n\n\t\t\t// set foreign key to be null if there are some records affected\n\t\t\tmodelValue := reflect.New(scope.GetModelStruct().ModelType).Interface()\n\t\t\tif results := newDB.Model(modelValue).UpdateColumn(foreignKeyMap); results.Error == nil {\n\t\t\t\tif results.RowsAffected \u003e 0 {\n\t\t\t\t\tscope.updatedAttrsWithValues(foreignKeyMap)\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\tassociation.setErr(results.Error)\n\t\t\t}\n\t\t} else if relationship.Kind == \"has_one\" || relationship.Kind == \"has_many\" {\n\t\t\t// find all relations\n\t\t\tprimaryKeys := scope.getColumnAsArray(relationship.AssociationForeignFieldNames, scope.Value)\n\t\t\tnewDB = newDB.Where(\n\t\t\t\tfmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, relationship.ForeignDBNames), toQueryMarks(primaryKeys)),\n\t\t\t\ttoQueryValues(primaryKeys)...,\n\t\t\t)\n\n\t\t\t// only include those deleting relations\n\t\t\tnewDB = newDB.Where(\n\t\t\t\tfmt.Sprintf(\"%v IN (%v)\", toQueryCondition(scope, deletingResourcePrimaryDBNames), toQueryMarks(deletingPrimaryKeys)),\n\t\t\t\ttoQueryValues(deletingPrimaryKeys)...,\n\t\t\t)\n\n\t\t\t// set matched relation's foreign key to be null\n\t\t\tfieldValue := reflect.New(association.field.Field.Type()).Interface()\n\t\t\tassociation.setErr(newDB.Model(fieldValue).UpdateColumn(foreignKeyMap).Error)\n\t\t}\n\t}\n\n\t// Remove deleted records from source's field\n\tif association.Error == nil {\n\t\tif field.Kind() == reflect.Slice {\n\t\t\tleftValues := reflect.Zero(field.Type())\n\n\t\t\tfor i := 0; i \u003c field.Len(); i++ {\n\t\t\t\treflectValue := field.Index(i)\n\t\t\t\tprimaryKey := scope.getColumnAsArray(deletingResourcePrimaryFieldNames, reflectValue.Interface())[0]\n\t\t\t\tvar isDeleted = false\n\t\t\t\tfor _, pk := range deletingPrimaryKeys {\n\t\t\t\t\tif equalAsString(primaryKey, pk) {\n\t\t\t\t\t\tisDeleted = true\n\t\t\t\t\t\tbreak\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tif !isDeleted {\n\t\t\t\t\tleftValues = reflect.Append(leftValues, reflectValue)\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tassociation.field.Set(leftValues)\n\t\t} else if field.Kind() == reflect.Struct {\n\t\t\tprimaryKey := scope.getColumnAsArray(deletingResourcePrimaryFieldNames, field.Interface())[0]\n\t\t\tfor _, pk := range deletingPrimaryKeys {\n\t\t\t\tif equalAsString(primaryKey, pk) {\n\t\t\t\t\tassociation.field.Set(reflect.Zero(field.Type()))\n\t\t\t\t\tbreak\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn association\n}",
+         "github.com/jinzhu/gorm.DB.Association": "func (s *DB) Association(column string) *Association {\n\tvar err error\n\tvar scope = s.Set(\"gorm:association:source\", s.Value).NewScope(s.Value)\n\n\tif primaryField := scope.PrimaryField(); primaryField.IsBlank {\n\t\terr = errors.New(\"primary key can't be nil\")\n\t} else {\n\t\tif field, ok := scope.FieldByName(column); ok {\n\t\t\tif field.Relationship == nil || len(field.Relationship.ForeignFieldNames) == 0 {\n\t\t\t\terr = fmt.Errorf(\"invalid association %v for %v\", column, scope.IndirectValue().Type())\n\t\t\t} else {\n\t\t\t\treturn \u0026Association{scope: scope, column: column, field: field}\n\t\t\t}\n\t\t} else {\n\t\t\terr = fmt.Errorf(\"%v doesn't have column %v\", scope.IndirectValue().Type(), column)\n\t\t}\n\t}\n\n\treturn \u0026Association{Error: err}\n}",
+         "github.com/jinzhu/gorm.DB.Count": "func (s *DB) Count(value interface{}) *DB {\n\treturn s.NewScope(s.Value).count(value).db\n}",
+         "github.com/jinzhu/gorm.DB.Create": "func (s *DB) Create(value interface{}) *DB {\n\tscope := s.NewScope(value)\n\treturn scope.callCallbacks(s.parent.callbacks.creates).db\n}",
+         "github.com/jinzhu/gorm.DB.Find": "func (s *DB) Find(out interface{}, where ...interface{}) *DB {\n\treturn s.NewScope(out).inlineCondition(where...).callCallbacks(s.parent.callbacks.queries).db\n}",
+         "github.com/jinzhu/gorm.DB.First": "func (s *DB) First(out interface{}, where ...interface{}) *DB {\n\tnewScope := s.NewScope(out)\n\tnewScope.Search.Limit(1)\n\n\treturn newScope.Set(\"gorm:order_by_primary_key\", \"ASC\").\n\t\tinlineCondition(where...).callCallbacks(s.parent.callbacks.queries).db\n}",
+         "github.com/jinzhu/gorm.DB.Model": "func (s *DB) Model(value interface{}) *DB {\n\tc := s.clone()\n\tc.Value = value\n\treturn c\n}",
+         "github.com/jinzhu/gorm.DB.Rows": "func (s *DB) Rows() (*sql.Rows, error) {\n\treturn s.NewScope(s.Value).rows()\n}",
+         "github.com/jinzhu/gorm.DB.Select": "func (s *DB) Select(query interface{}, args ...interface{}) *DB {\n\treturn s.clone().search.Select(query, args...).db\n}",
+         "github.com/jinzhu/gorm.DB.Table": "func (s *DB) Table(name string) *DB {\n\tclone := s.clone()\n\tclone.search.Table(name)\n\tclone.Value = nil\n\treturn clone\n}",
+         "github.com/jinzhu/gorm.DB.Update": "func (s *DB) Update(attrs ...interface{}) *DB {\n\treturn s.Updates(toSearchableMap(attrs...), true)\n}",
+         "github.com/jinzhu/gorm.DB.Where": "func (s *DB) Where(query interface{}, args ...interface{}) *DB {\n\treturn s.clone().search.Where(query, args...).db\n}"
+      },
+      "ast_version": ""
+   }
+}
