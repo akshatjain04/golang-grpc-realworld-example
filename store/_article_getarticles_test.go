@@ -100,9 +100,12 @@ Validation:
 ```
 
 These scenarios cover a range of normal operations, edge cases, and error handling for the `GetArticles` function. They test various combinations of input parameters and expected outcomes, ensuring comprehensive coverage of the function's behavior.
+
+roost_feedback [2/18/2025, 10:43:19 AM]:undefined
 */
 
 // ********RoostGPT********
+
 package store
 
 import (
@@ -175,12 +178,92 @@ func TestArticleStoreGetArticles(t *testing.T) {
 			offset:      0,
 			mockSetup: func(m *mockDB) {
 				m.DB.Error = nil
-				// TODO: Set up mock to return sample articles
+				articles := []model.Article{
+					{Title: "Article 1", Description: "Description 1"},
+					{Title: "Article 2", Description: "Description 2"},
+				}
+				m.DB.AddError(nil)
+				m.DB.Statement.Dest = &articles
 			},
-			expected:    []model.Article{}, // TODO: Add expected articles
+			expected: []model.Article{
+				{Title: "Article 1", Description: "Description 1"},
+				{Title: "Article 2", Description: "Description 2"},
+			},
 			expectedErr: nil,
 		},
-		// ... (other test cases remain the same)
+		{
+			name:        "Get Articles with Tag Filter",
+			tagName:     "golang",
+			username:    "",
+			favoritedBy: nil,
+			limit:       5,
+			offset:      0,
+			mockSetup: func(m *mockDB) {
+				m.DB.Error = nil
+				articles := []model.Article{
+					{Title: "Golang Article", Description: "About Golang", TagList: []string{"golang"}},
+				}
+				m.DB.AddError(nil)
+				m.DB.Statement.Dest = &articles
+			},
+			expected: []model.Article{
+				{Title: "Golang Article", Description: "About Golang", TagList: []string{"golang"}},
+			},
+			expectedErr: nil,
+		},
+		{
+			name:        "Get Articles by Username",
+			tagName:     "",
+			username:    "johndoe",
+			favoritedBy: nil,
+			limit:       10,
+			offset:      0,
+			mockSetup: func(m *mockDB) {
+				m.DB.Error = nil
+				articles := []model.Article{
+					{Title: "John's Article", Description: "By John Doe", Author: model.User{Username: "johndoe"}},
+				}
+				m.DB.AddError(nil)
+				m.DB.Statement.Dest = &articles
+			},
+			expected: []model.Article{
+				{Title: "John's Article", Description: "By John Doe", Author: model.User{Username: "johndoe"}},
+			},
+			expectedErr: nil,
+		},
+		{
+			name:        "Get Favorited Articles",
+			tagName:     "",
+			username:    "",
+			favoritedBy: &model.User{ID: 1, Username: "janedoe"},
+			limit:       10,
+			offset:      0,
+			mockSetup: func(m *mockDB) {
+				m.DB.Error = nil
+				articles := []model.Article{
+					{Title: "Favorited Article", Description: "Liked by Jane"},
+				}
+				m.DB.AddError(nil)
+				m.DB.Statement.Dest = &articles
+			},
+			expected: []model.Article{
+				{Title: "Favorited Article", Description: "Liked by Jane"},
+			},
+			expectedErr: nil,
+		},
+		{
+			name:        "Database Error",
+			tagName:     "",
+			username:    "",
+			favoritedBy: nil,
+			limit:       10,
+			offset:      0,
+			mockSetup: func(m *mockDB) {
+				m.DB.Error = gorm.ErrRecordNotFound
+			},
+			expected:    nil,
+			expectedErr: gorm.ErrRecordNotFound,
+		},
 	}
 
 	for _, tt := range tests {
