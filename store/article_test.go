@@ -4,21 +4,22 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
 	"github.com/raahii/golang-grpc-realworld-example/model"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type mockDB struct {
 	countResult int
 	countError  error
 }
+type MockDB struct {
+	mock.Mock
+	*gorm.DB
+}
 
-/*
-ROOST_METHOD_HASH=IsFavorited_799826fee5
-ROOST_METHOD_SIG_HASH=IsFavorited_f6d5e67492
-
-FUNCTION_DEF=func (s *ArticleStore) IsFavorited(a *model.Article, u *model.User) (bool, error) // IsFavorited returns whether the article is favorited by the user
-*/
 func (m *mockDB) Count(value interface{}) *gorm.DB {
 	*value.(*int) = m.countResult
 	return &gorm.DB{Error: m.countError}
@@ -123,4 +124,64 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 
 func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return &gorm.DB{Value: m}
+}
+
+/*
+ROOST_METHOD_HASH=GetArticles_101b7250e8
+ROOST_METHOD_SIG_HASH=GetArticles_91bc0a6760
+
+FUNCTION_DEF=func (s *ArticleStore) GetArticles(tagName, username string, favoritedBy *model.User, limit, offset int64) ([ // GetArticles get global articles
+]model.Article, error)
+*/
+func TestArticleStoreGetArticles(t *testing.T) {
+	tests := []struct {
+		name        string
+		tagName     string
+		username    string
+		favoritedBy *model.User
+		limit       int64
+		offset      int64
+		mockSetup   func(*MockDB)
+		want        []model.Article
+		wantErr     bool
+	}{
+		{
+			name:        "Get Articles with No Filters",
+			tagName:     "",
+			username:    "",
+			favoritedBy: nil,
+			limit:       10,
+			offset:      0,
+			mockSetup: func(m *MockDB) {
+
+			},
+			want:    []model.Article{},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockDB := &MockDB{}
+			setupMockDB(mockDB)
+			tt.mockSetup(mockDB)
+
+			store := &ArticleStore{db: mockDB.DB}
+
+			got, err := store.GetArticles(tt.tagName, tt.username, tt.favoritedBy, tt.limit, tt.offset)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.want, got)
+			}
+		})
+	}
+}
+
+func setupMockDB(mockDB *MockDB) {
+	db, _, _ := sqlmock.New()
+	gdb, _ := gorm.Open("mysql", db)
+	mockDB.DB = gdb
 }
