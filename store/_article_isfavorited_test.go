@@ -89,9 +89,12 @@ Validation:
 ```
 
 These test scenarios cover various aspects of the `IsFavorited` function, including normal operation, edge cases, and error handling. They take into account the function's parameters, its interaction with the database, and potential error conditions.
+
+roost_feedback [2/18/2025, 3:30:50 PM]:MockDB should look like this\r\n  type mockDB struct {\r\n\tcountResult int\r\n\tcountError  error\r\n\t*gorm.DB\r\n}\r\n  \r\n  \r\n  Inside the test function, initialize ArticleStore in this manner:\r\n  store := &ArticleStore{db: mockDB.DB}
 */
 
 // ********RoostGPT********
+
 package store
 
 import (
@@ -100,42 +103,31 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/raahii/golang-grpc-realworld-example/model"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 type mockDB struct {
-	mock.Mock
+	countResult int
+	countError  error
+	*gorm.DB
 }
 
 func (m *mockDB) Table(name string) *gorm.DB {
-	args := m.Called(name)
-	return args.Get(0).(*gorm.DB)
+	return m
 }
 
 func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	mockArgs := m.Called(query, args)
-	return mockArgs.Get(0).(*gorm.DB)
+	return m
 }
 
 func (m *mockDB) Count(value interface{}) *gorm.DB {
-	args := m.Called(value)
-	return args.Get(0).(*gorm.DB)
+	if ptr, ok := value.(*int); ok {
+		*ptr = m.countResult
+	}
+	return m
 }
 
-type mockGormDB struct {
-	*gorm.DB
-	mock.Mock
-}
-
-func (m *mockGormDB) Error() error {
-	args := m.Called()
-	return args.Error(0)
-}
-
-// ArticleStore wrapper to use mockDB
-type mockArticleStore struct {
-	ArticleStore
-	mockDB *mockDB
+func (m *mockDB) Error() error {
+	return m.countError
 }
 
 func TestArticleStoreIsFavorited(t *testing.T) {
@@ -152,35 +144,17 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockDB := new(mockDB)
+			mockDB := &mockDB{}
 			if tt.setupMock != nil {
 				tt.setupMock(mockDB)
 			}
 
-			store := &mockArticleStore{
-				ArticleStore: ArticleStore{db: nil}, // We're not using this field
-				mockDB:       mockDB,
-			}
+			store := &ArticleStore{db: mockDB.DB}
 
 			result, err := store.IsFavorited(tt.article, tt.user)
 
 			assert.Equal(t, tt.expectedResult, result)
 			assert.Equal(t, tt.expectedError, err)
-
-			mockDB.AssertExpectations(t)
 		})
 	}
-}
-
-// Override IsFavorited method to use mockDB
-func (s *mockArticleStore) IsFavorited(a *model.Article, u *model.User) (bool, error) {
-	if a == nil || u == nil {
-		return false, nil
-	}
-	var count int
-	err := s.mockDB.Table("favorite_articles").Where("article_id = ? AND user_id = ?", a.ID, u.ID).Count(&count).Error()
-	if err != nil {
-		return false, err
-	}
-	return count > 0, nil
 }
