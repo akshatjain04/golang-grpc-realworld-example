@@ -11,13 +11,13 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type mockDB struct {
-	countResult int
-	countError  error
-}
 type MockDB struct {
 	mock.Mock
 	*gorm.DB
+}
+type mockDB struct {
+	countResult int
+	countError  error
 }
 
 func (m *mockDB) Count(value interface{}) *gorm.DB {
@@ -34,6 +34,53 @@ func NewMockDB(countResult int, countError error) *gorm.DB {
 
 func (m *mockDB) Table(name string) *gorm.DB {
 	return &gorm.DB{Value: m}
+}
+
+func TestArticleStoreGetArticles(t *testing.T) {
+	tests := []struct {
+		name        string
+		tagName     string
+		username    string
+		favoritedBy *model.User
+		limit       int64
+		offset      int64
+		mockSetup   func(*MockDB)
+		want        []model.Article
+		wantErr     bool
+	}{
+		{
+			name:        "Get Articles with No Filters",
+			tagName:     "",
+			username:    "",
+			favoritedBy: nil,
+			limit:       10,
+			offset:      0,
+			mockSetup: func(m *MockDB) {
+
+			},
+			want:    []model.Article{},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockDB := &MockDB{}
+			setupMockDB(mockDB)
+			tt.mockSetup(mockDB)
+
+			store := &ArticleStore{db: mockDB.DB}
+
+			got, err := store.GetArticles(tt.tagName, tt.username, tt.favoritedBy, tt.limit, tt.offset)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.want, got)
+			}
+		})
+	}
 }
 
 func TestArticleStoreIsFavorited(t *testing.T) {
@@ -124,60 +171,6 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 
 func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return &gorm.DB{Value: m}
-}
-
-/*
-ROOST_METHOD_HASH=GetArticles_101b7250e8
-ROOST_METHOD_SIG_HASH=GetArticles_91bc0a6760
-
-FUNCTION_DEF=func (s *ArticleStore) GetArticles(tagName, username string, favoritedBy *model.User, limit, offset int64) ([ // GetArticles get global articles
-]model.Article, error)
-*/
-func TestArticleStoreGetArticles(t *testing.T) {
-	tests := []struct {
-		name        string
-		tagName     string
-		username    string
-		favoritedBy *model.User
-		limit       int64
-		offset      int64
-		mockSetup   func(*MockDB)
-		want        []model.Article
-		wantErr     bool
-	}{
-		{
-			name:        "Get Articles with No Filters",
-			tagName:     "",
-			username:    "",
-			favoritedBy: nil,
-			limit:       10,
-			offset:      0,
-			mockSetup: func(m *MockDB) {
-
-			},
-			want:    []model.Article{},
-			wantErr: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			mockDB := &MockDB{}
-			setupMockDB(mockDB)
-			tt.mockSetup(mockDB)
-
-			store := &ArticleStore{db: mockDB.DB}
-
-			got, err := store.GetArticles(tt.tagName, tt.username, tt.favoritedBy, tt.limit, tt.offset)
-
-			if tt.wantErr {
-				assert.Error(t, err)
-			} else {
-				assert.NoError(t, err)
-				assert.Equal(t, tt.want, got)
-			}
-		})
-	}
 }
 
 func setupMockDB(mockDB *MockDB) {
