@@ -1,108 +1,143 @@
 package store
 
 import (
+	"errors"
 	"testing"
 
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
 	"github.com/raahii/golang-grpc-realworld-example/model"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
-type MockDB struct {
-	mock.Mock
+type mockDB struct {
+	countResult int
+	countError  error
 	*gorm.DB
 }
 
 /*
-ROOST_METHOD_HASH=GetArticles_101b7250e8
-ROOST_METHOD_SIG_HASH=GetArticles_91bc0a6760
+ROOST_METHOD_HASH=IsFavorited_799826fee5
+ROOST_METHOD_SIG_HASH=IsFavorited_f6d5e67492
 
-FUNCTION_DEF=func (s *ArticleStore) GetArticles(tagName, username string, favoritedBy *model.User, limit, offset int64) ([ // GetArticles get global articles
-]model.Article, error)
+FUNCTION_DEF=func (s *ArticleStore) IsFavorited(a *model.Article, u *model.User) (bool, error) // IsFavorited returns whether the article is favorited by the user
 */
-func (m *MockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
-	return m.DB
+func (m *mockDB) Count(value interface{}) *gorm.DB {
+	*value.(*int) = m.countResult
+	return &gorm.DB{Error: m.countError}
 }
 
-func (m *MockDB) Joins(query string, args ...interface{}) *gorm.DB {
-	return m.DB
+func (m *mockDB) Exec(sql string, values ...interface{}) *gorm.DB {
+	return &gorm.DB{}
 }
 
-func (m *MockDB) Limit(limit interface{}) *gorm.DB {
-	return m.DB
+func (m *mockDB) First(out interface{}, where ...interface{}) *gorm.DB {
+	return &gorm.DB{}
 }
 
-func (m *MockDB) Offset(offset interface{}) *gorm.DB {
-	return m.DB
+func (m *mockDB) Model(value interface{}) *gorm.DB {
+	return &gorm.DB{}
 }
 
-func (m *MockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
-	return m.DB
+func (m *mockDB) Table(name string) *gorm.DB {
+	return &gorm.DB{}
 }
 
-func (m *MockDB) Select(query interface{}, args ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *MockDB) Table(name string) *gorm.DB {
-	return m.DB
-}
-
-func TestArticleStoreGetArticles(t *testing.T) {
+func TestArticleStoreIsFavorited(t *testing.T) {
 	tests := []struct {
-		name        string
-		tagName     string
-		username    string
-		favoritedBy *model.User
-		limit       int64
-		offset      int64
-		mockSetup   func(*MockDB)
-		expected    []model.Article
-		expectedErr error
+		name            string
+		article         *model.Article
+		user            *model.User
+		mockCountResult int
+		mockCountError  error
+		want            bool
+		wantErr         bool
 	}{
 		{
-			name:     "Scenario 1: Get Articles with No Filters",
-			tagName:  "",
-			username: "",
-			limit:    10,
-			offset:   0,
-			mockSetup: func(m *MockDB) {
-				m.DB.Error = nil
-			},
-			expected:    []model.Article{},
-			expectedErr: nil,
+			name:            "Article is favorited by the user",
+			article:         &model.Article{Model: gorm.Model{ID: 1}},
+			user:            &model.User{Model: gorm.Model{ID: 1}},
+			mockCountResult: 1,
+			mockCountError:  nil,
+			want:            true,
+			wantErr:         false,
+		},
+		{
+			name:            "Article is not favorited by the user",
+			article:         &model.Article{Model: gorm.Model{ID: 1}},
+			user:            &model.User{Model: gorm.Model{ID: 1}},
+			mockCountResult: 0,
+			mockCountError:  nil,
+			want:            false,
+			wantErr:         false,
+		},
+		{
+			name:            "Nil Article parameter",
+			article:         nil,
+			user:            &model.User{Model: gorm.Model{ID: 1}},
+			mockCountResult: 0,
+			mockCountError:  nil,
+			want:            false,
+			wantErr:         false,
+		},
+		{
+			name:            "Nil User parameter",
+			article:         &model.Article{Model: gorm.Model{ID: 1}},
+			user:            nil,
+			mockCountResult: 0,
+			mockCountError:  nil,
+			want:            false,
+			wantErr:         false,
+		},
+		{
+			name:            "Database error",
+			article:         &model.Article{Model: gorm.Model{ID: 1}},
+			user:            &model.User{Model: gorm.Model{ID: 1}},
+			mockCountResult: 0,
+			mockCountError:  errors.New("database error"),
+			want:            false,
+			wantErr:         true,
+		},
+		{
+			name:            "Empty database table",
+			article:         &model.Article{Model: gorm.Model{ID: 1}},
+			user:            &model.User{Model: gorm.Model{ID: 1}},
+			mockCountResult: 0,
+			mockCountError:  nil,
+			want:            false,
+			wantErr:         false,
+		},
+		{
+			name:            "Multiple favorites for the same article",
+			article:         &model.Article{Model: gorm.Model{ID: 1}},
+			user:            &model.User{Model: gorm.Model{ID: 1}},
+			mockCountResult: 1,
+			mockCountError:  nil,
+			want:            true,
+			wantErr:         false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockDB := &MockDB{}
-			setupMockDB(mockDB)
-			tt.mockSetup(mockDB)
+			mockDB := &mockDB{
+				countResult: tt.mockCountResult,
+				countError:  tt.mockCountError,
+				DB:          &gorm.DB{},
+			}
 
 			store := &ArticleStore{db: mockDB.DB}
 
-			articles, err := store.GetArticles(tt.tagName, tt.username, tt.favoritedBy, tt.limit, tt.offset)
-
-			if tt.expectedErr != nil {
-				assert.Error(t, err)
-				assert.Equal(t, tt.expectedErr.Error(), err.Error())
-			} else {
-				assert.NoError(t, err)
-				assert.Equal(t, tt.expected, articles)
+			got, err := store.IsFavorited(tt.article, tt.user)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ArticleStore.IsFavorited() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("ArticleStore.IsFavorited() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func (m *MockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func setupMockDB(mockDB *MockDB) {
-	db, _, _ := sqlmock.New()
-	gdb, _ := gorm.Open("mysql", db)
-	mockDB.DB = gdb
+func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
+	return &gorm.DB{}
 }
