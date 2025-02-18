@@ -89,9 +89,12 @@ Validation:
 ```
 
 These test scenarios cover various aspects of the `IsFavorited` function, including normal operation, edge cases, and error handling. They take into account the function's parameters, expected behavior, and potential database interactions.
+
+roost_feedback [2/18/2025, 4:02:26 PM]:\r\n  MockDB should look like this\r\n  type mockDB struct {\r\n\tcountResult int\r\n\tcountError  error\r\n\t*gorm.DB\r\n}\r\n  \r\n  \r\n  Inside the test function, initialize ArticleStore in this manner:\r\n  store := &ArticleStore{db: mockDB.DB}
 */
 
 // ********RoostGPT********
+
 package store
 
 import (
@@ -103,9 +106,9 @@ import (
 )
 
 type mockDB struct {
-	*gorm.DB
 	countResult int
 	countError  error
+	*gorm.DB
 }
 
 func (m *mockDB) Table(name string) *gorm.DB {
@@ -203,10 +206,8 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 				countResult: tt.countResult,
 				countError:  tt.countError,
 			}
-			s := &ArticleStore{
-				db: mockDB,
-			}
-			got, err := s.IsFavorited(tt.article, tt.user)
+			store := &ArticleStore{db: mockDB.DB}
+			got, err := store.IsFavorited(tt.article, tt.user)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ArticleStore.IsFavorited() error = %v, wantErr %v", err, tt.wantErr)
 				return

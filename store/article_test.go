@@ -21,6 +21,11 @@ type mockDB struct {
 	*gorm.DB
 }
 
+func (m *mockDB) Count(value interface{}) *gorm.DB {
+	*(value.(*int)) = m.countResult
+	return &gorm.DB{Error: m.countError}
+}
+
 func (m *MockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
 	return m.DB
 }
@@ -38,6 +43,10 @@ func (m *MockDB) Offset(offset interface{}) *gorm.DB {
 }
 
 func (m *MockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
+	return m.DB
+}
+
+func (m *mockDB) Table(name string) *gorm.DB {
 	return m.DB
 }
 
@@ -175,31 +184,6 @@ func TestArticleStoreGetArticles(t *testing.T) {
 	}
 }
 
-func (m *MockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func setupMockDB(mockDB *MockDB) {
-	db, _, _ := sqlmock.New()
-	gdb, _ := gorm.Open("mysql", db)
-	mockDB.DB = gdb
-}
-
-/*
-ROOST_METHOD_HASH=IsFavorited_799826fee5
-ROOST_METHOD_SIG_HASH=IsFavorited_f6d5e67492
-
-FUNCTION_DEF=func (s *ArticleStore) IsFavorited(a *model.Article, u *model.User) (bool, error) // IsFavorited returns whether the article is favorited by the user
-*/
-func (m *mockDB) Count(value interface{}) *gorm.DB {
-	*(value.(*int)) = m.countResult
-	return &gorm.DB{Error: m.countError}
-}
-
-func (m *mockDB) Table(name string) *gorm.DB {
-	return m.DB
-}
-
 func TestArticleStoreIsFavorited(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -295,6 +279,12 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 	}
 }
 
-func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
+func (m *MockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return m.DB
+}
+
+func setupMockDB(mockDB *MockDB) {
+	db, _, _ := sqlmock.New()
+	gdb, _ := gorm.Open("mysql", db)
+	mockDB.DB = gdb
 }
