@@ -100,59 +100,70 @@ Validation:
 ```
 
 These scenarios cover a range of normal operations, edge cases, and error handling for the `GetArticles` function. They test the various filtering options, pagination, combination of filters, and error conditions, providing a comprehensive test suite for the function's behavior.
+
+roost_feedback [2/18/2025, 1:13:20 PM]:Use this import:\r\n          github.com/DATA-DOG/go-sqlmock                                                                                                                                         \r\n  \r\n  MockDB should look like this\r\n  type MockDB struct {\r\n    mock.Mock\r\n    *gorm.DB\r\n  } \r\n  \r\n  Declare this function to setup mock db:\r\n  func setupMockDB(mockDB *MockDB) {\r\n          db, _, _ := sqlmock.New()                                                                                                                                                \r\n          gdb, _ := gorm.Open(mysql, db)                                                                                                                                         \r\n          mockDB.DB = gdb                                                                                                                                                          \r\n  }\r\n  \r\n  \r\n  Inside the test function, initialize ArticleStore in this manner:\r\n  \r\n  setupMockDB(mockDB)                                                                                                                                      \r\n  store := &ArticleStore{db: mockDB.DB}                                                                                                                    \r\n
 */
 
 // ********RoostGPT********
+
 package store
 
 import (
 	"testing"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
 	"github.com/raahii/golang-grpc-realworld-example/model"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-// mockDB implements the necessary methods of gorm.DB
-type mockDB struct {
-	Error error
+type MockDB struct {
+	mock.Mock
 	*gorm.DB
 }
 
-func (m *mockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
-	return m
+func setupMockDB(mockDB *MockDB) {
+	db, _, _ := sqlmock.New()
+	gdb, _ := gorm.Open("mysql", db)
+	mockDB.DB = gdb
 }
 
-func (m *mockDB) Joins(query string, args ...interface{}) *gorm.DB {
-	return m
+func (m *MockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return m
+func (m *MockDB) Joins(query string, args ...interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Offset(offset interface{}) *gorm.DB {
-	return m
+func (m *MockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Limit(limit interface{}) *gorm.DB {
-	return m
+func (m *MockDB) Offset(offset interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
-	return m
+func (m *MockDB) Limit(limit interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Select(query interface{}, args ...interface{}) *gorm.DB {
-	return m
+func (m *MockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Table(name string) *gorm.DB {
-	return m
+func (m *MockDB) Select(query interface{}, args ...interface{}) *gorm.DB {
+	return m.DB
 }
 
-func (m *mockDB) Rows() (*gorm.Rows, error) {
-	return nil, m.Error
+func (m *MockDB) Table(name string) *gorm.DB {
+	return m.DB
+}
+
+func (m *MockDB) Rows() (*gorm.Rows, error) {
+	args := m.Called()
+	return args.Get(0).(*gorm.Rows), args.Error(1)
 }
 
 func TestArticleStoreGetArticles(t *testing.T) {
@@ -163,7 +174,7 @@ func TestArticleStoreGetArticles(t *testing.T) {
 		favoritedBy *model.User
 		limit       int64
 		offset      int64
-		mockSetup   func(*mockDB)
+		mockSetup   func(*MockDB)
 		expected    []model.Article
 		expectedErr error
 	}{
@@ -174,8 +185,8 @@ func TestArticleStoreGetArticles(t *testing.T) {
 			favoritedBy: nil,
 			limit:       10,
 			offset:      0,
-			mockSetup: func(m *mockDB) {
-				m.Error = nil
+			mockSetup: func(m *MockDB) {
+				m.On("Rows").Return(&gorm.Rows{}, nil)
 			},
 			expected:    []model.Article{},
 			expectedErr: nil,
@@ -185,10 +196,11 @@ func TestArticleStoreGetArticles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockDB := &mockDB{DB: &gorm.DB{}}
+			mockDB := &MockDB{}
+			setupMockDB(mockDB)
 			tt.mockSetup(mockDB)
 
-			store := &ArticleStore{db: mockDB}
+			store := &ArticleStore{db: mockDB.DB}
 
 			articles, err := store.GetArticles(tt.tagName, tt.username, tt.favoritedBy, tt.limit, tt.offset)
 
