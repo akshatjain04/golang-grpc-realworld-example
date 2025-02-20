@@ -100,9 +100,12 @@ Validation:
 ```
 
 These scenarios cover a range of normal operations, edge cases, and error handling for the `GetArticles` function. They test the various filtering options, pagination, combination of filters, and error conditions, providing a comprehensive test suite for this function.
+
+roost_feedback [2/20/2025, 12:16:28 PM]:Modify Code to fix this error\n./article_articlestore.getarticles_test.go:127:9: cannot use m (variable of type *mockDB) as *gorm.DB value in return statement
 */
 
 // ********RoostGPT********
+
 package store
 
 import (
@@ -115,7 +118,6 @@ import (
 )
 
 type mockDB struct {
-	*gorm.DB
 	findFunc func(out interface{}) *gorm.DB
 }
 
@@ -179,13 +181,59 @@ func TestArticleStoreGetArticles(t *testing.T) {
 			},
 			want: []model.Article{{Title: "Article 1"}, {Title: "Article 2"}},
 		},
-		// ... (other test cases remain the same)
+		{
+			name:     "Get Articles With Tag Filter",
+			tagName:  "technology",
+			username: "",
+			limit:    5,
+			offset:   0,
+			mockFind: func(out interface{}) *gorm.DB {
+				*out.(*[]model.Article) = []model.Article{{Title: "Tech Article 1"}, {Title: "Tech Article 2"}}
+				return &gorm.DB{}
+			},
+			want: []model.Article{{Title: "Tech Article 1"}, {Title: "Tech Article 2"}},
+		},
+		{
+			name:     "Get Articles By Author",
+			tagName:  "",
+			username: "johndoe",
+			limit:    10,
+			offset:   0,
+			mockFind: func(out interface{}) *gorm.DB {
+				*out.(*[]model.Article) = []model.Article{{Title: "John's Article"}}
+				return &gorm.DB{}
+			},
+			want: []model.Article{{Title: "John's Article"}},
+		},
+		{
+			name:        "Get Favorited Articles",
+			tagName:     "",
+			username:    "",
+			favoritedBy: &model.User{Username: "janedoe"},
+			limit:       10,
+			offset:      0,
+			mockFind: func(out interface{}) *gorm.DB {
+				*out.(*[]model.Article) = []model.Article{{Title: "Favorited Article"}}
+				return &gorm.DB{}
+			},
+			want: []model.Article{{Title: "Favorited Article"}},
+		},
+		{
+			name:     "No Articles Found",
+			tagName:  "",
+			username: "",
+			limit:    10,
+			offset:   0,
+			mockFind: func(out interface{}) *gorm.DB {
+				return &gorm.DB{}
+			},
+			want: []model.Article{},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockDB := &mockDB{
-				DB:       &gorm.DB{}, // Initialize with an empty gorm.DB
 				findFunc: tt.mockFind,
 			}
 			s := &ArticleStore{
