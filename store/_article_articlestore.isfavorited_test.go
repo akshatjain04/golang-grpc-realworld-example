@@ -108,9 +108,12 @@ Validation:
 ```
 
 These scenarios cover a range of normal operations, edge cases, and error handling situations for the `IsFavorited` function. They take into account the function's parameters, its interaction with the database, and various possible states of the data.
+
+roost_feedback [2/20/2025, 1:19:39 PM]:- Comment or remove this test method
 */
 
 // ********RoostGPT********
+
 package store
 
 import (
@@ -139,12 +142,10 @@ func (m *mockDB) Count(value interface{}) *gorm.DB {
 	return &gorm.DB{Error: m.countError}
 }
 
-// ArticleStore struct with a DB interface instead of *gorm.DB
 type ArticleStore struct {
 	db DB
 }
 
-// DB interface to allow mocking
 type DB interface {
 	Table(name string) *gorm.DB
 	Where(query interface{}, args ...interface{}) *gorm.DB
