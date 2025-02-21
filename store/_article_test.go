@@ -3,6 +3,8 @@
 /*
 
 roost_feedback [2/21/2025, 3:13:49 PM]:Use this implemenation of mockDB struct in the test code:\r\n```\r\ntype mockDB struct {\r\n\tmock.Mock\r\n\t*gorm.DB\r\n\tcountResult int\r\n\tcountError  error\r\n}\r\n```\r\n\r\nReplace keyword mockAssociation with mockDB in entire test code\r\n\r\nIn the test iterations inside the test functions
+
+roost_feedback [2/21/2025, 3:19:43 PM]:In the test iterations inside the test functions, intialize ArticleStore like this:\r\n```\r\nstore := &ArticleStore{\r\n\tdb: mockDB.DB,\r\n}\r\n```\r\n\r\nRemove all duplicate functions from the test code\r\n\r\nRemove all unused functions from the test code. E.g. remove this function (and all others like this which are not called in the test code):\r\n```\r\nfunc (m *mockDB) Rows() (*gorm.Rows, error) {\r\n\treturn nil, nil\r\n}\r\n```\r\n\r\n
 */
 
 // ********RoostGPT********
@@ -16,7 +18,6 @@ import (
 	"github.com/raahii/golang-grpc-realworld-example/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"time"
 )
 
 type mockDB struct {
@@ -54,6 +55,20 @@ func (m *mockDB) Model(value interface{}) *gorm.DB {
 func (m *mockDB) Rollback() *gorm.DB {
 	args := m.Called()
 	return args.Get(0).(*gorm.DB)
+}
+
+func (m *mockDB) Update(column string, value interface{}) *gorm.DB {
+	args := m.Called(column, value)
+	return args.Get(0).(*gorm.DB)
+}
+
+func (m *mockDB) Count(value interface{}) *gorm.DB {
+	*value.(*int) = m.countResult
+	return &gorm.DB{Error: m.countError}
+}
+
+func (m *mockDB) Table(name string) *gorm.DB {
+	return &gorm.DB{Error: m.countError}
 }
 
 func TestArticleStoreAddFavorite(t *testing.T) {
@@ -149,7 +164,7 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 			}
 
 			store := &ArticleStore{
-				db: mockDB,
+				db: mockDB.DB,
 			}
 
 			err := store.AddFavorite(tt.article, tt.user)
@@ -167,81 +182,6 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 			mockDB.AssertExpectations(t)
 		})
 	}
-}
-
-func (m *mockDB) Update(column string, value interface{}) *gorm.DB {
-	args := m.Called(column, value)
-	return args.Get(0).(*gorm.DB)
-}
-
-func (m *mockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Joins(query string, args ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Limit(limit interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Offset(offset interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Rows() (*gorm.Rows, error) {
-	return nil, nil
-}
-
-func (m *mockDB) Select(query interface{}, args ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Table(name string) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return m.DB
-}
-
-func (m *mockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
-	args := m.Called(out, where)
-	return args.Get(0).(*gorm.DB)
-}
-
-func (m *mockDB) Limit(limit interface{}) *gorm.DB {
-	args := m.Called(limit)
-	return args.Get(0).(*gorm.DB)
-}
-
-func (m *mockDB) Offset(offset interface{}) *gorm.DB {
-	args := m.Called(offset)
-	return args.Get(0).(*gorm.DB)
-}
-
-func (m *mockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
-	args := m.Called(column, conditions)
-	return args.Get(0).(*gorm.DB)
-}
-
-func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	callArgs := m.Called(query, args)
-	return callArgs.Get(0).(*gorm.DB)
-}
-
-func (m *mockDB) Count(value interface{}) *gorm.DB {
-	*value.(*int) = m.countResult
-	return &gorm.DB{Error: m.countError}
-}
-
-func (m *mockDB) Table(name string) *gorm.DB {
-	return &gorm.DB{Error: m.countError}
 }
 
 func TestArticleStoreIsFavorited(t *testing.T) {
@@ -334,10 +274,10 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 				countResult: tt.mockCountResult,
 				countError:  tt.mockCountError,
 			}
-			s := &ArticleStore{
-				db: mockDB,
+			store := &ArticleStore{
+				db: mockDB.DB,
 			}
-			got, err := s.IsFavorited(tt.article, tt.user)
+			got, err := store.IsFavorited(tt.article, tt.user)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ArticleStore.IsFavorited() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -347,8 +287,4 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 			}
 		})
 	}
-}
-
-func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return &gorm.DB{Error: m.countError}
 }
