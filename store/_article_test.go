@@ -1,3 +1,12 @@
+
+// ********RoostGPT********
+/*
+
+roost_feedback [2/21/2025, 3:13:49 PM]:Use this implemenation of mockDB struct in the test code:\r\n```\r\ntype mockDB struct {\r\n\tmock.Mock\r\n\t*gorm.DB\r\n\tcountResult int\r\n\tcountError  error\r\n}\r\n```\r\n\r\nReplace keyword mockAssociation with mockDB in entire test code\r\n\r\nIn the test iterations inside the test functions
+*/
+
+// ********RoostGPT********
+
 package github.com/raahii/golang-grpc-realworld-example/store
 
 import (
@@ -10,22 +19,14 @@ import (
 	"time"
 )
 
+type mockDB struct {
+	mock.Mock
+	*gorm.DB
+	countResult int
+	countError  error
+}
 
-
-
-
-
-
-
-/*
-ROOST_METHOD_HASH=ArticleStore_AddFavorite_9460fca478
-ROOST_METHOD_SIG_HASH=ArticleStore_AddFavorite_c13a109f91
-
-FUNCTION_DEF=func (s *ArticleStore) AddFavorite(a *model.Article, u *model.User) error // AddFavorite favorite an article
-
-
-*/
-func (m *mockAssociation) Append(values ...interface{}) error {
+func (m *mockDB) Append(values ...interface{}) error {
 	args := m.Called(values...)
 	return args.Error(0)
 }
@@ -71,7 +72,7 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 				tx := &gorm.DB{}
 				m.On("Begin").Return(tx)
 				m.On("Model", mock.Anything).Return(tx)
-				assoc := &mockAssociation{}
+				assoc := &mockDB{}
 				assoc.On("Append", mock.Anything).Return(nil)
 				m.On("Association", "FavoritedUsers").Return(assoc)
 				m.On("Update", "favorites_count", gorm.Expr("favorites_count + ?", 1)).Return(tx)
@@ -89,7 +90,7 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 				tx := &gorm.DB{}
 				m.On("Begin").Return(tx)
 				m.On("Model", mock.Anything).Return(tx)
-				assoc := &mockAssociation{}
+				assoc := &mockDB{}
 				assoc.On("Append", mock.Anything).Return(errors.New("association error"))
 				m.On("Association", "FavoritedUsers").Return(assoc)
 				m.On("Rollback").Return(tx)
@@ -106,7 +107,7 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 				tx := &gorm.DB{}
 				m.On("Begin").Return(tx)
 				m.On("Model", mock.Anything).Return(tx)
-				assoc := &mockAssociation{}
+				assoc := &mockDB{}
 				assoc.On("Append", mock.Anything).Return(nil)
 				m.On("Association", "FavoritedUsers").Return(assoc)
 				m.On("Update", "favorites_count", gorm.Expr("favorites_count + ?", 1)).Return(&gorm.DB{Error: errors.New("update error")})
@@ -121,7 +122,6 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 		{
 			name: "Add Favorite with Nil Article",
 			setupMock: func(m *mockDB) {
-
 			},
 			article:        nil,
 			user:           &model.User{},
@@ -132,7 +132,6 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 		{
 			name: "Add Favorite with Nil User",
 			setupMock: func(m *mockDB) {
-
 			},
 			article:        &model.Article{FavoritesCount: 0},
 			user:           nil,
@@ -175,15 +174,6 @@ func (m *mockDB) Update(column string, value interface{}) *gorm.DB {
 	return args.Get(0).(*gorm.DB)
 }
 
-
-/*
-ROOST_METHOD_HASH=ArticleStore_GetArticles_101b7250e8
-ROOST_METHOD_SIG_HASH=ArticleStore_GetArticles_91bc0a6760
-
-FUNCTION_DEF=func (s *ArticleStore) GetArticles(tagName, username string, favoritedBy *model.User, limit, offset int64) ([ // GetArticles get global articles
-]model.Article, error) 
-
-*/
 func (m *mockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
 	return m.DB
 }
@@ -220,15 +210,6 @@ func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return m.DB
 }
 
-
-/*
-ROOST_METHOD_HASH=ArticleStore_GetFeedArticles_a37e1934b6
-ROOST_METHOD_SIG_HASH=ArticleStore_GetFeedArticles_f5f09c020e
-
-FUNCTION_DEF=func (s *ArticleStore) GetFeedArticles(userIDs [ // GetFeedArticles returns following users' articles
-]uint, limit, offset int64) ([]model.Article, error) 
-
-*/
 func (m *mockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
 	args := m.Called(out, where)
 	return args.Get(0).(*gorm.DB)
@@ -254,15 +235,6 @@ func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return callArgs.Get(0).(*gorm.DB)
 }
 
-
-/*
-ROOST_METHOD_HASH=ArticleStore_IsFavorited_799826fee5
-ROOST_METHOD_SIG_HASH=ArticleStore_IsFavorited_f6d5e67492
-
-FUNCTION_DEF=func (s *ArticleStore) IsFavorited(a *model.Article, u *model.User) (bool, error) // IsFavorited returns whether the article is favorited by the user
-
-
-*/
 func (m *mockDB) Count(value interface{}) *gorm.DB {
 	*value.(*int) = m.countResult
 	return &gorm.DB{Error: m.countError}
@@ -380,4 +352,3 @@ func TestArticleStoreIsFavorited(t *testing.T) {
 func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return &gorm.DB{Error: m.countError}
 }
-
