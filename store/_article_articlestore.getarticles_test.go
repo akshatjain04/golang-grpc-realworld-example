@@ -102,6 +102,8 @@ Validation:
 These scenarios cover a range of normal operations, edge cases, and error handling for the `GetArticles` function. They test the various filtering options, pagination, combination of filters, and error conditions, providing a comprehensive test suite for this function.
 
 roost_feedback [2/20/2025, 12:16:28 PM]:Modify Code to fix this error\n./article_articlestore.getarticles_test.go:127:9: cannot use m (variable of type *mockDB) as *gorm.DB value in return statement
+
+roost_feedback [2/21/2025, 4:19:48 AM]:Modify Code to fix this error\n\n./article_articlestore.getarticles_test.go:129:9: cannot use m (variable of type *mockDB) as *gorm.DB value in return statement
 */
 
 // ********RoostGPT********
@@ -118,6 +120,7 @@ import (
 )
 
 type mockDB struct {
+	gorm.DB
 	findFunc func(out interface{}) *gorm.DB
 }
 
