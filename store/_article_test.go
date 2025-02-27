@@ -1,35 +1,33 @@
-package github.com/raahii/golang-grpc-realworld-example/store
+// ********RoostGPT********
+/*
+
+roost_feedback [2/27/2025, 5:10:04 PM]:1. Use package name as store in test code.\r\n\r\n2. Declare the mockDB struct like this:\r\n   ```\r\n   type mockDB struct {\r\n\tmock.Mock\r\n\tfindFunc func(out interface{}, where ...interface{}) *gorm.DB \r\n  }\r\n    ```\r\n\r\n3. In the test iterations, initialize the store variable like this:\r\n   ```\r\n   store := &ArticleStore{db: mockDB.Begin().Debug().Begin()}\r\n   ```\r\n
+*/
+
+// ********RoostGPT********
+
+package store
 
 import (
-	errors "errors"
-	sync "sync"
-	testing "testing"
-	gorm "github.com/jinzhu/gorm"
-	model "github.com/raahii/golang-grpc-realworld-example/model"
-	assert "github.com/stretchr/testify/assert"
-	mock "github.com/stretchr/testify/mock"
+	"errors"
+	"sync"
+	"testing"
+
+	"github.com/jinzhu/gorm"
+	"github.com/raahii/golang-grpc-realworld-example/model"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-
-
-
+type mockDB struct {
+	mock.Mock
+	findFunc func(out interface{}, where ...interface{}) *gorm.DB
+}
 
 type mockAssociation struct {
 	mock.Mock
 }
-type mockDB struct {
-	mock.Mock
-}
 
-
-/*
-ROOST_METHOD_HASH=ArticleStore_AddFavorite_9460fca478
-ROOST_METHOD_SIG_HASH=ArticleStore_AddFavorite_c13a109f91
-
-FUNCTION_DEF=func (s *ArticleStore) AddFavorite(a *model.Article, u *model.User) error // AddFavorite favorite an article
-
-
-*/
 func (m *mockAssociation) Append(values ...interface{}) error {
 	args := m.Called(values...)
 	return args.Error(0)
@@ -65,15 +63,6 @@ func (m *mockDB) Update(column string, value interface{}) *gorm.DB {
 	return args.Get(0).(*gorm.DB)
 }
 
-
-/*
-ROOST_METHOD_HASH=ArticleStore_DeleteFavorite_29c18a04a8
-ROOST_METHOD_SIG_HASH=ArticleStore_DeleteFavorite_53deb5e792
-
-FUNCTION_DEF=func (s *ArticleStore) DeleteFavorite(a *model.Article, u *model.User) error // DeleteFavorite unfavorite an article
-
-
-*/
 func TestArticleStoreDeleteFavorite(t *testing.T) {
 	tests := []struct {
 		name           string
@@ -160,7 +149,7 @@ func TestArticleStoreDeleteFavorite(t *testing.T) {
 			mockAssoc := new(mockAssociation)
 			tt.setupMock(mockDB, mockAssoc)
 
-			store := &ArticleStore{db: mockDB}
+			store := &ArticleStore{db: mockDB.Begin().Debug().Begin()}
 			err := store.DeleteFavorite(tt.article, tt.user)
 
 			assert.Equal(t, tt.expectedError, err)
@@ -228,15 +217,6 @@ func (m *mockAssociation) Error() error {
 	return args.Error(0)
 }
 
-
-/*
-ROOST_METHOD_HASH=ArticleStore_GetCommentByID_7ecaa81f20
-ROOST_METHOD_SIG_HASH=ArticleStore_GetCommentByID_f6f8a51973
-
-FUNCTION_DEF=func (s *ArticleStore) GetCommentByID(id uint) (*model.Comment, error) // GetCommentByID finds an comment from id
-
-
-*/
 func TestArticleStoreGetCommentById(t *testing.T) {
 	tests := []struct {
 		name            string
@@ -325,7 +305,7 @@ func TestArticleStoreGetCommentById(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockDB := &mockDB{findFunc: tt.mockFindFunc}
-			store := &ArticleStore{db: mockDB}
+			store := &ArticleStore{db: mockDB.Begin().Debug().Begin()}
 
 			comment, err := store.GetCommentByID(tt.id)
 
@@ -338,4 +318,3 @@ func TestArticleStoreGetCommentById(t *testing.T) {
 func (m *mockDB) Find(out interface{}, where ...interface{}) *gorm.DB {
 	return m.findFunc(out, where...)
 }
-
