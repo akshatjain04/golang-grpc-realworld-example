@@ -106,6 +106,8 @@ roost_feedback [2/28/2025, 12:42:36 PM]:undefined
 roost_feedback [2/28/2025, 1:25:12 PM]:undefined
 
 roost_feedback [2/28/2025, 2:24:32 PM]:1. Use package name as store in test code.\r\n\r\n2. Declare the mockDB struct like this:\r\n   ```\r\n   type mockDB struct {\r\n\tfindFunc func(out interface{}) *gorm.DB\r\n\trowsFunc func() (*gorm.RowsQueryResult, error)\r\n   }\r\n   ```\r\n3. initialize the store variable in test iterations like this:\r\n   ```\r\n   \t\t\tstore := &ArticleStore{db: tt.mockDB.findFunc()}\r\n   ```\r\n\r\n4. Return *gorm.DB in the utility functions like this:\r\n   ```\r\n   func (m *mockDB) Find(out interface{}) *gorm.DB {\r\n\treturn m.findFunc(out)\r\n   }\r\n  func (m *mockDB) Joins(query string, args ...interface{}) *gorm.DB {\r\n\treturn m\r\n  }\r\n  func (m *mockDB) Limit(limit interface{}) *gorm.DB {\r\n\treturn m\r\n  }\r\n  func (m *mockDB) Offset(offset interface{}) *gorm.DB {\r\n\treturn m\r\n  }\r\n  func (m *mockDB) Preload(column string, conditions ...interface{}) *gorm.DB {\r\n\treturn m\r\n  }\r\n  func (m *mockDB) Rows() (*gorm.Rows, error) {\r\n\treturn m.rowsFunc()\r\n  }\r\n  func (m *mockDB) Select(query interface{}, args ...interface{}) *gorm.DB {\r\n\treturn m\r\n  }\r\n  func (m *mockDB) Table(name string) *gorm.DB {\r\n\treturn m\r\n  }\r\n  func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {\r\n\treturn m\r\n  }\r\n   ```\r\n
+
+roost_feedback [2/28/2025, 5:27:02 PM]:1. Use package name as store in test code.\r\n\r\n2. Declare the mockDB struct like this:\r\n   ```\r\n   type mockDB struct {\r\n\tfindFunc func(out interface{}) *gorm.DB\r\n\trowsFunc func() (*gorm.RowsQueryResult, error)\r\n   }\r\n   ```\r\n3. initialize the store variable in test iterations like this:\r\n   ```\r\n   \t\t\tstore := &ArticleStore{db: tt.mockDB.findFunc()}\r\n   ```\r\n\r\n4.These must be all the utility functions:\r\n   ```\r\n   \r\nfunc (m *mockDB) Find(out interface{}) *gorm.DB {\r\n\treturn m.findFunc(out)\r\n}\r\n\r\nfunc (m *mockDB) Joins(query string, args ...interface{}) *gorm.DB {\r\n\treturn m.findFunc(args)\r\n}\r\n\r\nfunc (m *mockDB) Limit(limit interface{}) *gorm.DB {\r\n\treturn m.findFunc(limit)\r\n}\r\n\r\nfunc (m *mockDB) Offset(offset interface{}) *gorm.DB {\r\n\treturn m.findFunc(offset)\r\n}\r\n\r\nfunc (m *mockDB) Preload(column string, conditions ...interface{}) *gorm.DB {\r\n\treturn m.findFunc(conditions)\r\n}\r\n\r\nfunc (m *mockDB) Rows() (*gorm.RowsQueryResult, error) {\r\n\treturn m.rowsFunc()\r\n}\r\n\r\nfunc (m *mockDB) Select(query interface{}, args ...interface{}) *gorm.DB {\r\n\treturn m.findFunc(args)\r\n}\r\n\r\nfunc (m *mockDB) Table(name string) *gorm.DB {\r\n\treturn m.findFunc(name)\r\n}\r\n\r\nfunc (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {\r\n\treturn m.findFunc(args)\r\n}\r\n\r\n   ```\r\n\r\n5. This MUST be the testing table:\r\n   ```\r\n    tests := []struct {\r\n\t\tname        string\r\n\t\ttagName     string\r\n\t\tusername    string\r\n\t\tfavoritedBy *model.User\r\n\t\tlimit       int64\r\n\t\toffset      int64\r\n\t\tmockDB      *mockDB\r\n\t\texpected    []model.Article\r\n\t\texpectedErr error\r\n\t}{\r\n\t\t{\r\n\t\t\tname:        Success,\r\n\t\t\ttagName:     test,\r\n\t\t\tusername:    testuser,\r\n\t\t\tfavoritedBy: &model.User{\r\n\t\t\t\t//ID: 1,\r\n\t\t\t},\r\n\t\t\tlimit:  10,\r\n\t\t\toffset: 0,\r\n\t\t\tmockDB: &mockDB{\r\n\t\t\t\tfindFunc: func(out interface{}) *gorm.DB {\r\n\t\t\t\t\t*(out.(*[]model.Article)) = []model.Article{\r\n\t\t\t\t\t\t{Title: Test Article},\r\n\t\t\t\t\t}\r\n\t\t\t\t\treturn &gorm.DB{}\r\n\t\t\t\t},\r\n\t\t\t},\r\n\t\t\texpected: []model.Article{\r\n\t\t\t\t{Title: Test Article},\r\n\t\t\t},\r\n\t\t\texpectedErr: nil,\r\n\t\t},\r\n\t\t{\r\n\t\t\tname: Error,\r\n\t\t\tmockDB: &mockDB{\r\n\t\t\t\tfindFunc: func(out interface{}) *gorm.DB {\r\n\t\t\t\t\treturn &gorm.DB{Error: errors.New(database error)}\r\n\t\t\t\t},\r\n\t\t\t},\r\n\t\t\texpectedErr: errors.New(database error),\r\n\t\t},\r\n\t\t{\r\n\t\t\tname:        Empty Result,\r\n\t\t\ttagName:     nonexistent,\r\n\t\t\tusername:    ,\r\n\t\t\tfavoritedBy: nil,\r\n\t\t\tlimit:       20,\r\n\t\t\toffset:      5,\r\n\t\t\tmockDB: &mockDB{\r\n\t\t\t\tfindFunc: func(out interface{}) *gorm.DB {\r\n\t\t\t\t\t*(out.(*[]model.Article)) = []model.Article{}\r\n\t\t\t\t\treturn &gorm.DB{}\r\n\t\t\t\t},\r\n\t\t\t},\r\n\t\t\texpected:    []model.Article{},\r\n\t\t\texpectedErr: nil,\r\n\t\t},\r\n\t}\r\n    ```\r\n
 */
 
 // ********RoostGPT********
@@ -139,24 +141,22 @@ func TestArticleStoreGetArticles(t *testing.T) {
 		expectedErr error
 	}{
 		{
-			name:     "Success",
-			tagName:  "test",
-			username: "testuser",
-			favoritedBy: &model.User{
-				ID: 1,
-			},
-			limit:  10,
-			offset: 0,
+			name:        "Success",
+			tagName:     "test",
+			username:    "testuser",
+			favoritedBy: &model.User{},
+			limit:       10,
+			offset:      0,
 			mockDB: &mockDB{
 				findFunc: func(out interface{}) *gorm.DB {
 					*(out.(*[]model.Article)) = []model.Article{
-						{ID: 1, Title: "Test Article"},
+						{Title: "Test Article"},
 					}
 					return &gorm.DB{}
 				},
 			},
 			expected: []model.Article{
-				{ID: 1, Title: "Test Article"},
+				{Title: "Test Article"},
 			},
 			expectedErr: nil,
 		},
@@ -208,19 +208,19 @@ func (m *mockDB) Find(out interface{}) *gorm.DB {
 }
 
 func (m *mockDB) Joins(query string, args ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(args)
 }
 
 func (m *mockDB) Limit(limit interface{}) *gorm.DB {
-	return m
+	return m.findFunc(limit)
 }
 
 func (m *mockDB) Offset(offset interface{}) *gorm.DB {
-	return m
+	return m.findFunc(offset)
 }
 
 func (m *mockDB) Preload(column string, conditions ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(conditions)
 }
 
 func (m *mockDB) Rows() (*gorm.RowsQueryResult, error) {
@@ -228,13 +228,13 @@ func (m *mockDB) Rows() (*gorm.RowsQueryResult, error) {
 }
 
 func (m *mockDB) Select(query interface{}, args ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(args)
 }
 
 func (m *mockDB) Table(name string) *gorm.DB {
-	return m
+	return m.findFunc(name)
 }
 
 func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(args)
 }
