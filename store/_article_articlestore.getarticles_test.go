@@ -103,6 +103,8 @@ Validation:
 These test scenarios cover a wide range of use cases for the `GetArticles` function, including normal operations, edge cases, and error handling. They take into account the various filters that can be applied (username, tag, favorites), as well as pagination functionality. The scenarios also consider potential database issues and extreme input values to ensure robust error handling and edge case management.
 
 roost_feedback [2/28/2025, 12:42:36 PM]:undefined
+
+roost_feedback [2/28/2025, 1:25:12 PM]:undefined
 */
 
 // ********RoostGPT********
@@ -158,8 +160,28 @@ func TestArticleStoreGetArticles(t *testing.T) {
 		},
 		{
 			name:        "Error",
-			mockDB:      &mockDB{},
+			mockDB: &mockDB{
+				findFunc: func(out interface{}) *gorm.DB {
+					return &gorm.DB{Error: errors.New("database error")}
+				},
+			},
 			expectedErr: errors.New("database error"),
+		},
+		{
+			name:     "Empty Result",
+			tagName:  "nonexistent",
+			username: "",
+			favoritedBy: nil,
+			limit:  20,
+			offset: 5,
+			mockDB: &mockDB{
+				findFunc: func(out interface{}) *gorm.DB {
+					*(out.(*[]model.Article)) = []model.Article{}
+					return &gorm.DB{}
+				},
+			},
+			expected:    []model.Article{},
+			expectedErr: nil,
 		},
 	}
 
