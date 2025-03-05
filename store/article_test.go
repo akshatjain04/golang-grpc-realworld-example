@@ -13,13 +13,6 @@ type mockDB struct {
 	*gorm.DB
 }
 
-/*
-ROOST_METHOD_HASH=ArticleStore_GetArticles_101b7250e8
-ROOST_METHOD_SIG_HASH=ArticleStore_GetArticles_91bc0a6760
-
-FUNCTION_DEF=func (s *ArticleStore) GetArticles(tagName, username string, favoritedBy *model.User, limit, offset int64) ([ // GetArticles get global articles
-]model.Article, error)
-*/
 func TestArticleStoreGetArticles(t *testing.T) {
 	tests := []struct {
 		name           string
