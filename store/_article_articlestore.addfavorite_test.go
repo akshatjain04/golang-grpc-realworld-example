@@ -136,7 +136,7 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 			db := &mockDB{}
 			tt.setupMock(db, tt.article, tt.user)
 
-			store := &ArticleStore{db: db}
+			store := &ArticleStore{db: db.Begin()}
 			err := store.AddFavorite(tt.article, tt.user)
 
 			assert.Equal(t, tt.expectedError, err)
@@ -151,7 +151,7 @@ func TestArticleStoreAddFavorite(t *testing.T) {
 }
 func TestArticleStoreAddFavoriteConcurrent(t *testing.T) {
 	db := &mockDB{}
-	store := &ArticleStore{db: db}
+	store := &ArticleStore{db: db.Begin()}
 	article := &model.Article{FavoritesCount: 0}
 	users := []*model.User{
 		{Model: gorm.Model{ID: 1}},

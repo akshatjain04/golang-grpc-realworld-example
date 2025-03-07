@@ -185,26 +185,26 @@ func (m *mockDB) Find(out interface{}) *gorm.DB {
 	return m.findFunc(out)
 }
 func (m *mockDB) Joins(query string, args ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(args)
 }
 func (m *mockDB) Limit(limit interface{}) *gorm.DB {
-	return m
+	return m.findFunc(limit)
 }
 func (m *mockDB) Offset(offset interface{}) *gorm.DB {
-	return m
+	return m.findFunc(offset)
 }
 func (m *mockDB) Preload(column string) *gorm.DB {
-	return m
+	return m.findFunc(column)
 }
 func (m *mockDB) Rows() (*sql.Rows, error) {
 	return nil, nil
 }
 func (m *mockDB) Select(query interface{}, args ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(args)
 }
 func (m *mockDB) Table(name string) *gorm.DB {
-	return m
+	return m.findFunc(name)
 }
 func (m *mockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
-	return m
+	return m.findFunc(args)
 }
