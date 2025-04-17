@@ -63,6 +63,8 @@ Execution:
     Assert: Use Go testing facilities to check if the function returns an error with the appropriate gRPC status codes.Canceled.
 Validation:
     This test ensures that the function will handle any database related errors and respond with the appropriate status when it is unable to create an article due to technical issues. This provides good error handling and debug-ability.
+
+roost_feedback [4/17/2025, 10:45:56 PM]:expand\stest\sscenarios
 */
 
 // ********RoostGPT********
@@ -76,10 +78,10 @@ import (
 
 	"github.com/raahii/golang-grpc-realworld-example/auth"
 	"github.com/raahii/golang-grpc-realworld-example/model"
-	"github.com/raahii/golang-grpc-realworld-example/proto"
 	pb "github.com/raahii/golang-grpc-realworld-example/proto"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -87,74 +89,16 @@ import (
 type mockArticleStore struct {
 	mock.Mock
 }
+
 type mockUserStore struct {
 	mock.Mock
 }
 
-func TestCreateArticle_Failure_CreateArticleDBError(t *testing.T) {
-
-	h := setUp(t)
-	userID := uint(1)
-	validCreateArticleReq := &proto.CreateAritcleRequest{Article: &pb.CreateAritcleRequest_Article{Title: "Test", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}}
-	h.us.(*mockUserStore).On("GetByID", userID).Return(&model.User{ID: userID}, nil)
-	h.as.(*mockArticleStore).On("Create", mock.Anything).Return(errors.New("db error"))
-
-	auth.GetUserID = func(context.Context) (uint, error) { return userID, nil }
-
-	_, err := h.CreateArticle(context.Background(), validCreateArticleReq)
-
-	if status.Code(err) != codes.Canceled {
-		t.Errorf("Expected code %v but got %v", codes.Canceled, status.Code(err))
-	}
-}
-func TestCreateArticle_Failure_NonExistentUser(t *testing.T) {
-
-	h := setUp(t)
-	userID := uint(1)
-	validCreateArticleReq := &proto.CreateAritcleRequest{Article: &pb.CreateAritcleRequest_Article{Title: "Test", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}}
-
-	auth.GetUserID = func(context.Context) (uint, error) { return userID, nil }
-	h.us.(*mockUserStore).On("GetByID", userID).Return(nil, errors.New("user not found"))
-
-	_, err := h.CreateArticle(context.Background(), validCreateArticleReq)
-
-	if status.Code(err) != codes.NotFound {
-		t.Errorf("Expected code %v but got %v", codes.NotFound, status.Code(err))
-	}
-}
-func TestCreateArticle_Failure_UnauthenticatedUser(t *testing.T) {
-
-	h := setUp(t)
-	userID := uint(1)
-	validCreateArticleReq := &proto.CreateAritcleRequest{Article: &pb.CreateAritcleRequest_Article{Title: "Test", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}}
-
-	auth.GetUserID = func(context.Context) (uint, error) { return 0, errors.New("invalid user") }
-
-	_, err := h.CreateArticle(context.Background(), validCreateArticleReq)
-
-	if status.Code(err) != codes.Unauthenticated {
-		t.Errorf("Expected code %v but got %v", codes.Unauthenticated, status.Code(err))
-	}
-}
-func TestCreateArticle_Failure_ValidationError(t *testing.T) {
-
-	h := setUp(t)
-	userID := uint(1)
-	invalidCreateArticleReq := &proto.CreateAritcleRequest{Article: &pb.CreateAritcleRequest_Article{Title: "", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}}
-
-	auth.GetUserID = func(context.Context) (uint, error) { return userID, nil }
-	h.us.(*mockUserStore).On("GetByID", userID).Return(&model.User{ID: userID}, nil)
-
-	_, err := h.CreateArticle(context.Background(), invalidCreateArticleReq)
-
-	if status.Code(err) != codes.InvalidArgument {
-		t.Errorf("Expected code %v but got %v", codes.InvalidArgument, status.Code(err))
-	}
-}
 func (m *mockArticleStore) Create(mo *model.Article) error {
 	args := m.Called(mo)
 	return args.Error(0)
 }
+
 func (m *mockUserStore) GetByID(id uint) (*model.User, error) {
 	args := m.Called(id)
 	if args.Get(0) == nil {
@@ -162,10 +106,12 @@ func (m *mockUserStore) GetByID(id uint) (*model.User, error) {
 	}
 	return args.Get(0).(*model.User), args.Error(1)
 }
+
 func (m *mockUserStore) IsFollowing(a *model.User, b *model.User) (bool, error) {
 	args := m.Called(a, b)
 	return args.Bool(0), args.Error(1)
 }
+
 func setUp(t *testing.T) *Handler {
 	mockLogger := &zerolog.Logger{}
 	mockus := new(mockUserStore)
@@ -174,5 +120,75 @@ func setUp(t *testing.T) *Handler {
 		logger: mockLogger,
 		us:     mockus,
 		as:     mockas,
+	}
+}
+
+func TestCreateArticle(t *testing.T) {
+	testCases := []struct {
+		name      string
+		setupMock func(h *Handler, userID uint, req *pb.CreateArticleRequest)
+		userID    uint
+		req       *pb.CreateArticleRequest
+		wantErr   bool
+		errStatus codes.Code
+	}{
+		{
+			name: "Failure_CreateArticleDBError",
+			setupMock: func(h *Handler, userID uint, req *pb.CreateArticleRequest) {
+				h.us.(*mockUserStore).On("GetByID", userID).Return(&model.User{ID: userID}, nil)
+				h.as.(*mockArticleStore).On("Create", mock.Anything).Return(errors.New("db error"))
+			},
+			userID:    1,
+			req:       &pb.CreateArticleRequest{Article: &pb.CreateArticleRequest_Article{Title: "Test", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}},
+			wantErr:   true,
+			errStatus: codes.Canceled,
+		},
+		{
+			name: "Failure_NonExistentUser",
+			setupMock: func(h *Handler, userID uint, req *pb.CreateArticleRequest) {
+				h.us.(*mockUserStore).On("GetByID", userID).Return(nil, errors.New("user not found"))
+			},
+			userID:    1,
+			req:       &pb.CreateArticleRequest{Article: &pb.CreateArticleRequest_Article{Title: "Test", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}},
+			wantErr:   true,
+			errStatus: codes.NotFound,
+		},
+		{
+			name: "Failure_UnauthenticatedUser",
+			setupMock: func(h *Handler, userID uint, req *pb.CreateArticleRequest) {
+				auth.GetUserID = func(context.Context) (uint, error) { return 0, errors.New("invalid user") }
+			},
+			userID:    1,
+			req:       &pb.CreateArticleRequest{Article: &pb.CreateArticleRequest_Article{Title: "Test", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}},
+			wantErr:   true,
+			errStatus: codes.Unauthenticated,
+		},
+		{
+			name: "Failure_ValidationError",
+			setupMock: func(h *Handler, userID uint, req *pb.CreateArticleRequest) {
+				h.us.(*mockUserStore).On("GetByID", userID).Return(&model.User{ID: userID}, nil)
+			},
+			userID:    1,
+			req:       &pb.CreateArticleRequest{Article: &pb.CreateArticleRequest_Article{Title: "", Description: "Test description", Body: "Test body", TagList: []string{"foo", "bar"}}},
+			wantErr:   true,
+			errStatus: codes.InvalidArgument,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			h := setUp(t)
+
+			tc.setupMock(h, tc.userID, tc.req)
+
+			auth.GetUserID = func(context.Context) (uint, error) { return tc.userID, nil }
+
+			_, err := h.CreateArticle(context.Background(), tc.req)
+
+			if tc.wantErr {
+				require.Error(t, err)
+				require.Equal(t, tc.errStatus, status.Code(err))
+			}
+		})
 	}
 }
